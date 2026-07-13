@@ -10,6 +10,8 @@ const getProjects = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
 // @desc    Create a project
 // @route   POST /api/projects
 // @access  Private

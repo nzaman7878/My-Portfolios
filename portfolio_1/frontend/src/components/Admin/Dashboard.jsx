@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ProjectForm from './ProjectForm';
 
 export default function Dashboard() {
   const [messages, setMessages] = useState([]);
   const [projects, setProjects] = useState([]);
   const [activeTab, setActiveTab] = useState('messages');
-  const navigate = useNavigate();
+  
+  // State for forms
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
 
+  const navigate = useNavigate();
   const token = localStorage.getItem('adminToken');
 
   useEffect(() => {
@@ -51,6 +56,37 @@ export default function Dashboard() {
     }
   };
 
+  const handleProjectSubmit = async (projectData) => {
+    try {
+      const url = editingProject 
+        ? `http://localhost:5000/api/projects/${editingProject._id}`
+        : 'http://localhost:5000/api/projects';
+      
+      const method = editingProject ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify(projectData)
+      });
+
+      if (res.ok) {
+        setIsFormVisible(false);
+        setEditingProject(null);
+        fetchProjects();
+      } else {
+        const errorData = await res.json();
+        alert('Failed to save: ' + (errorData.message || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Network error occurred.');
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     navigate('/admin/login');
@@ -68,7 +104,7 @@ export default function Dashboard() {
 
         <div className="flex gap-4 mb-8">
           <button 
-            onClick={() => setActiveTab('messages')}
+            onClick={() => { setActiveTab('messages'); setIsFormVisible(false); }}
             className={`px-4 py-2 rounded ${activeTab === 'messages' ? 'bg-[var(--color-accent)] text-[var(--color-background)]' : 'bg-[var(--color-surface)] border-thin'}`}
           >
             Messages
@@ -99,20 +135,48 @@ export default function Dashboard() {
         )}
 
         {activeTab === 'projects' && (
-          <div className="flex flex-col gap-4">
-            {projects.map((proj) => (
-              <div key={proj._id} className="bg-[var(--color-surface)] border-thin p-6 rounded-lg flex justify-between items-center">
-                <div>
-                  <span className="text-[10px] uppercase tracking-widest text-[var(--color-accent)]">{proj.type}</span>
-                  <h3 className="text-xl font-bold">{proj.title}</h3>
+          <div className="flex flex-col gap-6">
+            {!isFormVisible && (
+              <button 
+                onClick={() => { setEditingProject(null); setIsFormVisible(true); }}
+                className="self-start px-6 py-2 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:opacity-90"
+              >
+                + Add New Project
+              </button>
+            )}
+
+            {isFormVisible && (
+              <ProjectForm 
+                project={editingProject} 
+                onSubmit={handleProjectSubmit} 
+                onCancel={() => { setIsFormVisible(false); setEditingProject(null); }} 
+              />
+            )}
+
+            <div className="flex flex-col gap-4">
+              {projects.map((proj) => (
+                <div key={proj._id} className="bg-[var(--color-surface)] border-thin p-6 rounded-lg flex justify-between items-center">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-widest text-[var(--color-accent)]">{proj.type}</span>
+                    <h3 className="text-xl font-bold">{proj.title}</h3>
+                  </div>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => { setEditingProject(proj); setIsFormVisible(true); window.scrollTo({top: 0, behavior: 'smooth'}); }} 
+                      className="px-4 py-2 bg-[var(--color-background)] text-[var(--color-primary-text)] border-thin rounded hover:bg-[var(--color-border-custom)] transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      onClick={() => deleteProject(proj._id)} 
+                      className="px-4 py-2 bg-red-900/20 text-red-400 border border-red-900/50 rounded hover:bg-red-900/50 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button onClick={() => deleteProject(proj._id)} className="px-4 py-2 bg-red-900/20 text-red-400 border border-red-900/50 rounded hover:bg-red-900/50 transition-colors">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </div>
