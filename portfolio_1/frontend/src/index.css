@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0B0F14;
+  --color-surface: #151B23;
+  --color-card: #1D2632;
+  --color-primary-text: #F5F7FA;
+  --color-secondary-text: #9AA7B5;
+  --color-border-custom: #283241;
+  --color-accent: #37E2D5;
+  --color-accent-secondary: #6C63FF;
+  --color-success: #36D399;
+  
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-background);
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    background-attachment: fixed;
+    color: var(--color-primary-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .border-thin {
+    border: 1px solid var(--color-border-custom);
+  }
+  
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+}
