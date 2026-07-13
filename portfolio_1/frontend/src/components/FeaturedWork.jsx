@@ -11,13 +11,13 @@ export default function FeaturedWork() {
     <AnimatedSection id="work" className="py-24">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
-        <div className="max-w-md">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight mb-4 text-[var(--color-primary-text)]">Selected Works</h2>
-          <p className="text-[var(--color-secondary-text)] font-light text-sm">
-            A collection of systems designed to solve complex problems elegantly.
+        <div className="max-w-2xl">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight mb-4 text-[var(--color-primary-text)]">Selected Projects</h2>
+          <p className="text-[var(--color-secondary-text)] font-light text-sm space-y-4">
+            I believe projects should demonstrate problem-solving rather than simply showcase technology. Each application below was built to explore real-world challenges while improving architecture, scalability, and user experience.
           </p>
         </div>
-        <div className="text-[var(--color-secondary-text)] font-mono text-sm tracking-widest">
+        <div className="text-[var(--color-secondary-text)] font-mono text-sm tracking-widest mt-8 md:mt-0 whitespace-nowrap">
           01 / 03
         </div>
       </div>

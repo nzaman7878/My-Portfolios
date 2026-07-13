@@ -4,14 +4,14 @@ const experiences = [
   {
     title: 'Master of Science in Information Technology',
     institution: 'Gauhati University',
-    period: 'Present',
-    description: 'Specializing in advanced software engineering principles and cutting-edge web technologies.',
+    period: 'Postgraduate',
+    description: 'My postgraduate education deepened my understanding of software engineering, distributed systems, databases, algorithms, and modern web technologies. It also encouraged me to apply theoretical knowledge through practical projects and continuous self-learning.',
   },
   {
-    title: 'Bachelor of Science',
-    institution: 'University of Technology',
-    period: 'Completed',
-    description: 'Built a strong foundation in computer science, algorithms, and system design.',
+    title: 'Bachelor of Science in Information Technology',
+    institution: 'B. Borooah College',
+    period: 'Undergraduate',
+    description: 'My undergraduate studies provided a strong foundation in programming, computer science, and software development, inspiring me to pursue a career in full-stack engineering.',
   },
 ];
 

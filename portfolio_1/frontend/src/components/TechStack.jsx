@@ -2,16 +2,28 @@ import { AnimatedSection } from './AnimatedSection';
 
 const categories = [
   {
-    title: 'CORE ENGINEERING',
-    skills: ['MongoDB', 'Express.js', 'React', 'Node.js', 'TypeScript'],
+    title: 'Frontend',
+    skills: ['React', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'TypeScript'],
   },
   {
-    title: 'GENERATIVE AI',
-    skills: ['LLM Integration', 'Prompt Engineering', 'RAG Systems', 'Vector Databases'],
+    title: 'Backend',
+    skills: ['Node.js', 'Express.js', 'FastAPI', 'Python', 'REST APIs'],
   },
   {
-    title: 'ARCHITECTURE & DESIGN',
-    skills: ['System Design', 'API Architecture', 'Microservices', 'Cloud Infrastructure'],
+    title: 'AI & LLM',
+    skills: ['LLM Integration', 'AI Agents', 'OpenAI API', 'Hugging Face', 'Prompt Engineering'],
+  },
+  {
+    title: 'Databases',
+    skills: ['MongoDB', 'PostgreSQL', 'Redis', 'Vector Databases'],
+  },
+  {
+    title: 'DevOps',
+    skills: ['Docker', 'AWS', 'Vercel', 'CI/CD Pipelines'],
+  },
+  {
+    title: 'Tools',
+    skills: ['Git', 'GitHub', 'Postman', 'Figma', 'Webpack'],
   },
 ];
 
@@ -22,7 +34,7 @@ export default function TechStack() {
         
         {/* Left Column */}
         <div className="w-full lg:w-[40%] flex flex-col">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight mb-4 text-[var(--color-primary-text)]">Technical Arsenal</h2>
+          <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight mb-4 text-[var(--color-primary-text)]">Tech Stack</h2>
           <p className="text-[var(--color-secondary-text)] font-light text-sm max-w-sm">
             A curated stack of modern technologies focused on performance, scalability, and intelligence.
           </p>

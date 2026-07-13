@@ -8,20 +8,29 @@ export default function About() {
         {/* Left Column */}
         <div className="w-full lg:w-[40%] flex flex-col gap-12">
           <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight text-[var(--color-primary-text)] leading-tight">
-            Evolving with the<br/>Intelligence.
+            About
           </h2>
           <blockquote className="text-lg md:text-xl font-serif italic text-[var(--color-secondary-text)] leading-relaxed border-l-2 border-[var(--color-border-custom)] pl-6">
-            "Transitioning to Gen AI meant rethinking architecture not just as code that executes, but as systems that understand."
+            "I'm a developer who enjoys building products that people genuinely enjoy using."
           </blockquote>
         </div>
 
         {/* Right Column */}
         <div className="w-full lg:w-[60%] flex flex-col gap-6 text-[var(--color-primary-text)] font-light text-sm leading-loose">
           <p>
-            My engineering journey began with the rigorous structure of the MERN stack—building robust APIs, managing complex state, and ensuring pixel-perfect frontends. But as the landscape shifted, so did my focus.
+            After completing my Master's in Information Technology, I chose to focus on full-stack web development because I love solving problems across the entire application—from designing intuitive user interfaces to building scalable backend systems and APIs.
           </p>
           <p>
-            The integration of Generative AI into modern applications isn't just an API call; it's a fundamental shift in how systems reason and respond. I bridge the gap between deterministic software architecture and probabilistic AI models to create intelligent, self-adapting tools.
+            Over the years, I've worked on projects ranging from Learning Management Systems and AI-powered applications to e-commerce platforms and healthcare solutions. Every project has taught me something new about writing maintainable code, designing better user experiences, and building software that scales.
+          </p>
+          <p>
+            Today, my primary stack is MongoDB, Express.js, React, and Node.js. Alongside that, I'm exploring Generative AI, LLM integration, AI agents, and modern developer tools to create applications that are not only functional but also intelligent.
+          </p>
+          <p>
+            Outside of coding, I enjoy learning new technologies, refining my development workflow, studying system design, and continuously improving my craft.
+          </p>
+          <p>
+            I'm always looking for opportunities to build meaningful products, collaborate with ambitious teams, and solve challenging engineering problems.
           </p>
         </div>
 

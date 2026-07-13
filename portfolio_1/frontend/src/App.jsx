@@ -4,6 +4,7 @@ import FeaturedWork from './components/FeaturedWork';
 import About from './components/About';
 import ExperienceTimeline from './components/ExperienceTimeline';
 import TechStack from './components/TechStack';
+import Projects from './components/Projects';
 import Philosophy from './components/Philosophy';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -15,11 +16,12 @@ function App() {
       <main>
         <Hero />
         <FeaturedWork />
-        <TechStack />
         <About />
+        <ExperienceTimeline />
+        <TechStack />
+        <Projects />
         <Philosophy />
-        {/* <ExperienceTimeline /> */}
-        {/* <Contact /> */}
+        <Contact />
       </main>
       <Footer />
     </div>

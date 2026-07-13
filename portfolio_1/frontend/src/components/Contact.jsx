@@ -5,7 +5,7 @@ export default function Contact() {
   return (
     <AnimatedSection id="contact">
       <div className="mb-24 flex flex-col gap-4">
-        <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Initiate Protocol</h2>
+        <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Let's Build Something Great</h2>
         <div className="h-[1px] w-full max-w-sm bg-[var(--color-border-custom)]"></div>
       </div>
 
@@ -57,9 +57,10 @@ export default function Contact() {
         <div className="flex flex-col justify-center gap-12 lg:pl-12">
           <div className="flex flex-col gap-4">
             <h3 className="text-2xl font-serif font-medium text-[var(--color-primary-text)]">Digital Presence</h3>
-            <p className="text-[var(--color-secondary-text)] font-light max-w-sm leading-relaxed">
-              Open to new opportunities, technical discussions, and collaborative projects.
-            </p>
+            <div className="text-[var(--color-secondary-text)] font-light max-w-md leading-relaxed flex flex-col gap-4">
+              <p>Whether it's building a modern web application, integrating AI into an existing product, or collaborating on an ambitious idea, I'm always excited to work on projects that create real impact.</p>
+              <p>If you're looking for someone who enjoys solving problems, writing clean code, and continuously learning, I'd love to connect.</p>
+            </div>
           </div>
           
           <div className="flex flex-col gap-6">

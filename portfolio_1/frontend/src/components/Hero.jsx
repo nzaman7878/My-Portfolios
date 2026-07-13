@@ -22,17 +22,19 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="text-6xl md:text-[5.5rem] lg:text-[6.5rem] font-serif font-bold tracking-tight leading-[1.05] text-balance mb-8 max-w-5xl text-[var(--color-primary-text)]"
         >
-          Building software that feels as <span className="italic text-[var(--color-accent-secondary)]">good</span> as it works.
+          Building modern web experiences with <span className="italic text-[var(--color-accent-secondary)]">MERN</span> and AI.
         </motion.h1>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-lg md:text-xl text-[var(--color-secondary-text)] max-w-2xl font-light mb-12 leading-relaxed"
+          className="text-lg md:text-xl text-[var(--color-secondary-text)] max-w-2xl font-light mb-12 leading-relaxed space-y-4"
         >
-          Nuruzzaman — Building modern web experiences with MERN and Gen AI. Engineering digital spaces with precision and intent.
-        </motion.p>
+          <p>Hi, I'm Nuruzzaman — a Full-Stack Developer from Assam, India, passionate about creating fast, scalable, and thoughtfully designed web applications.</p>
+          <p>My expertise lies in the MERN stack, and I'm currently expanding into Generative AI to build intelligent software that delivers real value. I enjoy transforming complex ideas into simple, intuitive digital experiences through clean architecture, modern design, and reliable code.</p>
+          <p>I believe the best products are built where technology, design, and user experience come together.</p>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
