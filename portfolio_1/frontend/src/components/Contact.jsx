@@ -1,7 +1,47 @@
+import { useState } from 'react';
 import { AnimatedSection } from './AnimatedSection';
 import { FaEnvelope, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    setErrorMessage('');
+
+    try {
+      // In production, this URL should be an environment variable
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong');
+      }
+
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => setStatus('idle'), 5000);
+      
+    } catch (error) {
+      setStatus('error');
+      setErrorMessage(error.message);
+    }
+  };
+
   return (
     <AnimatedSection id="contact">
       <div className="mb-24 flex flex-col gap-4">
@@ -13,13 +53,17 @@ export default function Contact() {
         
         {/* Contact Form */}
         <div className="border-thin bg-surface p-8 md:p-12 rounded">
-          <form className="flex flex-col gap-8">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="font-mono text-sm tracking-wider text-[var(--color-secondary-text)] uppercase">Name</label>
               <input 
                 type="text" 
                 id="name" 
-                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                disabled={status === 'loading'}
+                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50"
                 placeholder="John Doe"
               />
             </div>
@@ -29,7 +73,11 @@ export default function Contact() {
               <input 
                 type="email" 
                 id="email" 
-                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                disabled={status === 'loading'}
+                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50"
                 placeholder="john@example.com"
               />
             </div>
@@ -39,16 +87,29 @@ export default function Contact() {
               <textarea 
                 id="message" 
                 rows="4"
-                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light resize-none"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                disabled={status === 'loading'}
+                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light resize-none disabled:opacity-50"
                 placeholder="How can we collaborate?"
               ></textarea>
             </div>
 
+            {status === 'error' && (
+              <p className="text-red-500 text-sm font-medium">{errorMessage}</p>
+            )}
+            
+            {status === 'success' && (
+              <p className="text-green-500 text-sm font-medium">Message sent successfully! I'll get back to you soon.</p>
+            )}
+
             <button 
               type="submit" 
-              className="mt-4 px-8 py-4 bg-[var(--color-accent-secondary)] text-white font-medium rounded hover:bg-opacity-90 transition-colors w-fit"
+              disabled={status === 'loading' || status === 'success'}
+              className="mt-4 px-8 py-4 bg-[var(--color-accent-secondary)] text-white font-medium rounded hover:bg-opacity-90 transition-colors w-fit disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Send Message
+              {status === 'loading' ? 'Sending...' : status === 'success' ? 'Sent' : 'Send Message'}
             </button>
           </form>
         </div>
@@ -64,7 +125,7 @@ export default function Contact() {
           </div>
           
           <div className="flex flex-col gap-6">
-            <a href="mailto:contact@example.com" className="flex items-center gap-4 group w-fit">
+            <a href="mailto:nuruzzaman@example.com" className="flex items-center gap-4 group w-fit">
               <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-accent)] transition-colors">
                 <FaEnvelope size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-accent)] transition-colors" />
               </div>
