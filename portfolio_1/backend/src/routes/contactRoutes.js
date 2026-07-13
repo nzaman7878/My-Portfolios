@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const { submitMessage, getMessages } = require('../controllers/contactController');
+const { submitMessage, getMessages, deleteMessage } = require('../controllers/contactController');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Rate limiting configuration
@@ -22,5 +22,8 @@ router.post('/', contactLimiter, submitMessage);
 
 // GET /api/contact
 router.get('/', protect, getMessages);
+
+// DELETE /api/contact/:id
+router.delete('/:id', protect, deleteMessage);
 
 module.exports = router;

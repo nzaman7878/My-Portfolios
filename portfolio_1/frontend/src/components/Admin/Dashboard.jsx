@@ -56,6 +56,21 @@ export default function Dashboard() {
     }
   };
 
+  const deleteMessage = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this message?')) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        fetchMessages();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleProjectSubmit = async (projectData) => {
     try {
       const url = editingProject 
@@ -126,7 +141,15 @@ export default function Dashboard() {
                     <h3 className="text-xl font-bold">{msg.name}</h3>
                     <a href={`mailto:${msg.email}`} className="text-[var(--color-accent)]">{msg.email}</a>
                   </div>
-                  <span className="text-sm text-[var(--color-secondary-text)]">{new Date(msg.createdAt).toLocaleDateString()}</span>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-sm text-[var(--color-secondary-text)]">{new Date(msg.createdAt).toLocaleDateString()}</span>
+                    <button 
+                      onClick={() => deleteMessage(msg._id)} 
+                      className="px-3 py-1 text-xs bg-red-900/20 text-red-400 border border-red-900/50 rounded hover:bg-red-900/50 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
                 <p className="text-[var(--color-secondary-text)] whitespace-pre-wrap">{msg.message}</p>
               </div>
