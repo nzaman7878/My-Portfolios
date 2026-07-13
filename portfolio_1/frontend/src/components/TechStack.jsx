@@ -1,33 +1,38 @@
+import { useState, useEffect } from 'react';
 import { AnimatedSection } from './AnimatedSection';
 
-const categories = [
-  {
-    title: 'Frontend',
-    skills: ['React', 'Next.js', 'Tailwind CSS', 'Framer Motion', 'TypeScript'],
-  },
-  {
-    title: 'Backend',
-    skills: ['Node.js', 'Express.js', 'FastAPI', 'Python', 'REST APIs'],
-  },
-  {
-    title: 'AI & LLM',
-    skills: ['LLM Integration', 'AI Agents', 'OpenAI API', 'Hugging Face', 'Prompt Engineering'],
-  },
-  {
-    title: 'Databases',
-    skills: ['MongoDB', 'PostgreSQL', 'Redis', 'Vector Databases'],
-  },
-  {
-    title: 'DevOps',
-    skills: ['Docker', 'AWS', 'Vercel', 'CI/CD Pipelines'],
-  },
-  {
-    title: 'Tools',
-    skills: ['Git', 'GitHub', 'Postman', 'Figma', 'Webpack'],
-  },
-];
-
 export default function TechStack() {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/skills');
+        const data = await res.json();
+        if (data.success) {
+          setCategories(data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch skills:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSkills();
+  }, []);
+
+  if (loading) {
+    return (
+      <AnimatedSection id="skills" className="py-24">
+        <div className="flex justify-center items-center h-32">
+          <p className="text-[var(--color-secondary-text)]">Loading skills...</p>
+        </div>
+      </AnimatedSection>
+    );
+  }
+
   return (
     <AnimatedSection id="skills" className="py-24">
       <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
