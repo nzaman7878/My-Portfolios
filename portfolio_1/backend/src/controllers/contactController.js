@@ -42,6 +42,19 @@ const submitMessage = async (req, res, next) => {
   }
 };
 
+// @desc    Get all contact messages
+// @route   GET /api/contact
+// @access  Private
+const getMessages = async (req, res, next) => {
+  try {
+    const messages = await Message.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, count: messages.length, data: messages });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
-  submitMessage
+  submitMessage,
+  getMessages
 };

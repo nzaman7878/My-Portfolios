@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const { submitMessage } = require('../controllers/contactController');
+const { submitMessage, getMessages } = require('../controllers/contactController');
+const { protect } = require('../middlewares/authMiddleware');
 
 // Rate limiting configuration
 // Limits each IP to 5 requests per 15 minutes to prevent spam
@@ -18,5 +19,8 @@ const contactLimiter = rateLimit({
 
 // POST /api/contact
 router.post('/', contactLimiter, submitMessage);
+
+// GET /api/contact
+router.get('/', protect, getMessages);
 
 module.exports = router;

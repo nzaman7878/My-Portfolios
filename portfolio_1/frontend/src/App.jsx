@@ -1,30 +1,25 @@
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import FeaturedWork from './components/FeaturedWork';
-import About from './components/About';
-import ExperienceTimeline from './components/ExperienceTimeline';
-import TechStack from './components/TechStack';
-import Projects from './components/Projects';
-import Philosophy from './components/Philosophy';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './components/Admin/Login';
+import Dashboard from './components/Admin/Dashboard';
+import ProtectedRoute from './components/Admin/ProtectedRoute';
 
 function App() {
   return (
-    <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-primary-text)] font-sans selection:bg-[var(--color-accent)] selection:text-white overflow-x-hidden">
-      <Navbar />
-      <main>
-        <Hero />
-        <FeaturedWork />
-        <About />
-        <ExperienceTimeline />
-        <TechStack />
-        <Projects />
-        <Philosophy />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-primary-text)] font-sans selection:bg-[var(--color-accent)] selection:text-white overflow-x-hidden">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/admin" element={<Login />} />
+          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

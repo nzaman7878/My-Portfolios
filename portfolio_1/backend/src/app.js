@@ -20,6 +20,7 @@ app.get('/health', (req, res) => {
 });
 
 // Routes will be mounted here
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/contact', require('./routes/contactRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/skills', require('./routes/skillRoutes'));
