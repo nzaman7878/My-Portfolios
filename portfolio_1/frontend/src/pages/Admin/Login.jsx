@@ -43,8 +43,8 @@ export default function Login() {
             />
           </div>
 
-          <button type="submit" className="mt-4 px-6 py-3 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:bg-opacity-90 transition-colors">
-            Login
+          <button type="submit" disabled={loginMutation.isPending} className="mt-4 px-6 py-3 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:bg-opacity-90 transition-colors disabled:opacity-50">
+            {loginMutation.isPending ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>

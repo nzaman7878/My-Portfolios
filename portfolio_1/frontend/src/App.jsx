@@ -7,6 +7,8 @@ import SEO from './components/common/SEO';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import ErrorFallback from './components/common/ErrorFallback';
 
+import NotFound from './pages/NotFound';
+
 // Lazy load admin components to split the bundle
 const Login = lazy(() => import('./pages/Admin/Login'));
 const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
@@ -49,6 +51,9 @@ function App() {
               <Route path="experience" element={<AdminExperience />} />
               <Route path="skills" element={<AdminSkills />} />
             </Route>
+
+            {/* Catch-all route for 404 Not Found */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </div>

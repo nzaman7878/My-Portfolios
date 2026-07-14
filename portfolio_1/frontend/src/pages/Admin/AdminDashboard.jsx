@@ -1,5 +1,4 @@
 import { useMessages, useDeleteMessage } from '../../hooks/useContact';
-import toast from 'react-hot-toast';
 
 export default function AdminDashboard() {
   const { data: messages = [], isLoading } = useMessages();

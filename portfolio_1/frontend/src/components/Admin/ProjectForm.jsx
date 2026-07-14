@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { projectsApi } from '../../api/projects';
 
-export default function ProjectForm({ project, onSubmit, onCancel }) {
+export default function ProjectForm({ project, onSubmit, onCancel, isSubmitting }) {
   const [formData, setFormData] = useState({
     title: '',
     type: '',
@@ -65,18 +66,8 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
     formDataObj.append('image', file);
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const token = localStorage.getItem('adminToken');
+      const data = await projectsApi.uploadImage(formDataObj);
       
-      const res = await fetch(`${API_URL}/api/upload`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formDataObj
-      });
-      
-      const data = await res.json();
       if (data.success) {
         setFormData(prev => ({ ...prev, image: data.url }));
         toast.success('Image uploaded');
@@ -185,8 +176,8 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
       </div>
 
       <div className="flex gap-4 mt-4">
-        <button type="submit" className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-background)] rounded font-medium hover:opacity-90">
-          {project ? 'Update Project' : 'Create Project'}
+        <button disabled={isSubmitting || uploadingImage} type="submit" className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-background)] rounded font-medium hover:opacity-90 disabled:opacity-50">
+          {isSubmitting ? 'Saving...' : project ? 'Update Project' : 'Create Project'}
         </button>
         <button type="button" onClick={onCancel} className="px-6 py-2 border border-[var(--color-border-custom)] rounded hover:bg-[var(--color-surface)]">
           Cancel

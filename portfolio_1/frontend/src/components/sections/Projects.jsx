@@ -1,5 +1,4 @@
 import { useProjects } from '../../hooks/useProjects';
-import { motion } from 'framer-motion';
 import { AnimatedSection } from '../common/AnimatedSection';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { Skeleton } from '../common/Skeleton';

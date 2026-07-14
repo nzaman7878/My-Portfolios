@@ -54,6 +54,7 @@ export default function AdminProjects() {
           project={editingProject} 
           onSubmit={handleProjectSubmit} 
           onCancel={() => { setIsFormVisible(false); setEditingProject(null); }} 
+          isSubmitting={createProjectMutation.isPending || updateProjectMutation.isPending}
         />
       )}
 
