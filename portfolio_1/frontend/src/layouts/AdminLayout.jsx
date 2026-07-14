@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from '../components/common/ErrorFallback';
 export default function AdminLayout() {
   const navigate = useNavigate();
 
@@ -50,7 +51,9 @@ export default function AdminLayout() {
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto h-screen">
         <div className="max-w-5xl mx-auto">
-          <Outlet />
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Outlet />
+          </ErrorBoundary>
         </div>
       </main>
     </div>

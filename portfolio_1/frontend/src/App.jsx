@@ -1,9 +1,11 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { ErrorBoundary } from 'react-error-boundary';
 import Home from './pages/Home';
 import SEO from './components/common/SEO';
 import ProtectedRoute from './components/admin/ProtectedRoute';
+import ErrorFallback from './components/common/ErrorFallback';
 
 // Lazy load admin components to split the bundle
 const Login = lazy(() => import('./pages/Admin/Login'));
@@ -16,7 +18,8 @@ const AdminSkills = lazy(() => import('./pages/Admin/AdminSkills'));
 
 function App() {
   return (
-    <Router>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Router>
       <Toaster 
         position="bottom-right" 
         toastOptions={{
@@ -50,6 +53,7 @@ function App() {
         </Suspense>
       </div>
     </Router>
+    </ErrorBoundary>
   );
 }
 
