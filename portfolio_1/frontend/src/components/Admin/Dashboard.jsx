@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import ProjectForm from './ProjectForm';
 
 export default function Dashboard() {
@@ -45,7 +46,11 @@ export default function Dashboard() {
       });
       if (!res.ok) throw new Error('Failed to delete message');
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['messages'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messages'] });
+      toast.success('Message deleted');
+    },
+    onError: () => toast.error('Failed to delete message')
   });
 
   const deleteProjectMutation = useMutation({
@@ -56,7 +61,11 @@ export default function Dashboard() {
       });
       if (!res.ok) throw new Error('Failed to delete project');
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      toast.success('Project deleted');
+    },
+    onError: () => toast.error('Failed to delete project')
   });
 
   const saveProjectMutation = useMutation({
@@ -85,9 +94,10 @@ export default function Dashboard() {
       setIsFormVisible(false);
       setEditingProject(null);
       queryClient.invalidateQueries({ queryKey: ['projects'] });
+      toast.success(editingProject ? 'Project updated!' : 'Project created!');
     },
     onError: (error) => {
-      alert('Failed to save: ' + error.message);
+      toast.error(error.message);
     }
   });
 

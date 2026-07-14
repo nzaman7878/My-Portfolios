@@ -1,14 +1,27 @@
-import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { AnimatedSection } from './AnimatedSection';
 import { FaEnvelope, FaLinkedin, FaGithub } from 'react-icons/fa';
 
-export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+// Define the validation schema using Zod
+const contactSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  message: z.string().min(10, { message: 'Message must be at least 10 characters long' })
+});
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+export default function Contact() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: '', email: '', message: '' }
+  });
 
   const contactMutation = useMutation({
     mutationFn: async (data) => {
@@ -25,14 +38,13 @@ export default function Contact() {
       return responseData;
     },
     onSuccess: () => {
-      setFormData({ name: '', email: '', message: '' });
+      reset();
       setTimeout(() => contactMutation.reset(), 5000);
     }
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    contactMutation.mutate(formData);
+  const onSubmit = (data) => {
+    contactMutation.mutate(data);
   };
 
   return (
@@ -46,19 +58,18 @@ export default function Contact() {
         
         {/* Contact Form */}
         <div className="border-thin bg-surface p-8 md:p-12 rounded">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
               <label htmlFor="name" className="font-mono text-sm tracking-wider text-[var(--color-secondary-text)] uppercase">Name</label>
               <input 
                 type="text" 
                 id="name" 
-                value={formData.name}
-                onChange={handleChange}
-                required
+                {...register('name')}
                 disabled={contactMutation.isPending}
-                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50"
+                className={`bg-transparent border-b py-3 focus:outline-none transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50 ${errors.name ? 'border-red-500 focus:border-red-500' : 'border-[var(--color-border-custom)] focus:border-[var(--color-accent)]'}`}
                 placeholder="John Doe"
               />
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
             </div>
             
             <div className="flex flex-col gap-2">
@@ -66,13 +77,12 @@ export default function Contact() {
               <input 
                 type="email" 
                 id="email" 
-                value={formData.email}
-                onChange={handleChange}
-                required
+                {...register('email')}
                 disabled={contactMutation.isPending}
-                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50"
+                className={`bg-transparent border-b py-3 focus:outline-none transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-[var(--color-border-custom)] focus:border-[var(--color-accent)]'}`}
                 placeholder="john@example.com"
               />
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -80,13 +90,12 @@ export default function Contact() {
               <textarea 
                 id="message" 
                 rows="4"
-                value={formData.message}
-                onChange={handleChange}
-                required
+                {...register('message')}
                 disabled={contactMutation.isPending}
-                className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light resize-none disabled:opacity-50"
+                className={`bg-transparent border-b py-3 focus:outline-none transition-colors text-[var(--color-primary-text)] font-light resize-none disabled:opacity-50 ${errors.message ? 'border-red-500 focus:border-red-500' : 'border-[var(--color-border-custom)] focus:border-[var(--color-accent)]'}`}
                 placeholder="How can we collaborate?"
               ></textarea>
+              {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
             </div>
 
             {contactMutation.isError && (

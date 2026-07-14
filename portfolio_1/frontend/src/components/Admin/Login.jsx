@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -26,9 +25,10 @@ export default function Login() {
       }
 
       localStorage.setItem('adminToken', data.data.token);
+      toast.success('Login successful');
       navigate('/admin/dashboard');
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -57,7 +57,7 @@ export default function Login() {
               required 
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+
           <button type="submit" className="mt-4 px-6 py-3 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:bg-opacity-90 transition-colors">
             Login
           </button>

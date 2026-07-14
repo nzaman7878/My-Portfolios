@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 export default function ProjectForm({ project, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
@@ -78,12 +79,13 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
       const data = await res.json();
       if (data.success) {
         setFormData(prev => ({ ...prev, image: data.url }));
+        toast.success('Image uploaded');
       } else {
-        alert(data.message || 'Image upload failed');
+        toast.error(data.message || 'Image upload failed');
       }
     } catch (error) {
       console.error(error);
-      alert('Error uploading image');
+      toast.error('Error uploading image');
     } finally {
       setUploadingImage(false);
     }

@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
 import Login from './components/Admin/Login';
 import Dashboard from './components/Admin/Dashboard';
@@ -8,6 +9,16 @@ import ProtectedRoute from './components/Admin/ProtectedRoute';
 function App() {
   return (
     <Router>
+      <Toaster 
+        position="bottom-right" 
+        toastOptions={{
+          style: {
+            background: 'var(--color-surface)',
+            color: 'var(--color-primary-text)',
+            border: '1px solid var(--color-border-custom)',
+          },
+        }}
+      />
       <SEO 
         title="Nuruzzaman - Software Engineer"
         description="Welcome to the portfolio of Nuruzzaman, a Software Engineer specializing in modern web development."
