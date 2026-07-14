@@ -2,11 +2,17 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './components/Admin/Login';
 import Dashboard from './components/Admin/Dashboard';
+import SEO from './components/SEO';
 import ProtectedRoute from './components/Admin/ProtectedRoute';
 
 function App() {
   return (
     <Router>
+      <SEO 
+        title="Nuruzzaman - Software Engineer"
+        description="Welcome to the portfolio of Nuruzzaman, a Software Engineer specializing in modern web development."
+        image="https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg"
+      />
       <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-primary-text)] font-sans selection:bg-[var(--color-accent)] selection:text-white overflow-x-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
