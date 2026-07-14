@@ -1,45 +1,38 @@
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { AnimatedSection } from './AnimatedSection';
 import { FaEnvelope, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // idle, loading, success, error
-  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('loading');
-    setErrorMessage('');
-
-    try {
+  const contactMutation = useMutation({
+    mutationFn: async (data) => {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       const response = await fetch(`${API_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(data)
       });
-
-      const data = await response.json();
-
+      const responseData = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong');
+        throw new Error(responseData.message || 'Something went wrong');
       }
-
-      setStatus('success');
+      return responseData;
+    },
+    onSuccess: () => {
       setFormData({ name: '', email: '', message: '' });
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => setStatus('idle'), 5000);
-      
-    } catch (error) {
-      setStatus('error');
-      setErrorMessage(error.message);
+      setTimeout(() => contactMutation.reset(), 5000);
     }
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    contactMutation.mutate(formData);
   };
 
   return (
@@ -62,7 +55,7 @@ export default function Contact() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                disabled={status === 'loading'}
+                disabled={contactMutation.isPending}
                 className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50"
                 placeholder="John Doe"
               />
@@ -76,7 +69,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                disabled={status === 'loading'}
+                disabled={contactMutation.isPending}
                 className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light disabled:opacity-50"
                 placeholder="john@example.com"
               />
@@ -90,26 +83,26 @@ export default function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 required
-                disabled={status === 'loading'}
+                disabled={contactMutation.isPending}
                 className="bg-transparent border-b border-[var(--color-border-custom)] py-3 focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-primary-text)] font-light resize-none disabled:opacity-50"
                 placeholder="How can we collaborate?"
               ></textarea>
             </div>
 
-            {status === 'error' && (
-              <p className="text-red-500 text-sm font-medium">{errorMessage}</p>
+            {contactMutation.isError && (
+              <p className="text-red-500 text-sm font-medium">{contactMutation.error.message}</p>
             )}
             
-            {status === 'success' && (
+            {contactMutation.isSuccess && (
               <p className="text-green-500 text-sm font-medium">Message sent successfully! I'll get back to you soon.</p>
             )}
 
             <button 
               type="submit" 
-              disabled={status === 'loading' || status === 'success'}
+              disabled={contactMutation.isPending || contactMutation.isSuccess}
               className="mt-4 px-8 py-4 bg-[var(--color-accent-secondary)] text-white font-medium rounded hover:bg-opacity-90 transition-colors w-fit disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {status === 'loading' ? 'Sending...' : status === 'success' ? 'Sent' : 'Send Message'}
+              {contactMutation.isPending ? 'Sending...' : contactMutation.isSuccess ? 'Sent' : 'Send Message'}
             </button>
           </form>
         </div>

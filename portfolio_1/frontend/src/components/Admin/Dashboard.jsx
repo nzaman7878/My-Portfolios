@@ -1,79 +1,66 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import ProjectForm from './ProjectForm';
 
 export default function Dashboard() {
-  const [messages, setMessages] = useState([]);
-  const [projects, setProjects] = useState([]);
   const [activeTab, setActiveTab] = useState('messages');
-  
-  // State for forms
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const token = localStorage.getItem('adminToken');
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  useEffect(() => {
-    fetchMessages();
-    fetchProjects();
-  }, []);
-
-  const fetchMessages = async () => {
-    try {
+  // --- Queries ---
+  const { data: messages = [] } = useQuery({
+    queryKey: ['messages'],
+    queryFn: async () => {
       const res = await fetch(`${API_URL}/api/contact`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      if (!res.ok) throw new Error('Failed to fetch messages');
       const data = await res.json();
-      if (res.ok) setMessages(data.data);
-    } catch (error) {
-      console.error(error);
+      return data.data;
     }
-  };
+  });
 
-  const fetchProjects = async () => {
-    try {
+  const { data: projects = [] } = useQuery({
+    queryKey: ['projects'],
+    queryFn: async () => {
       const res = await fetch(`${API_URL}/api/projects`);
+      if (!res.ok) throw new Error('Failed to fetch projects');
       const data = await res.json();
-      if (res.ok) setProjects(data.data);
-    } catch (error) {
-      console.error(error);
+      return data.data;
     }
-  };
+  });
 
-  const deleteProject = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this project?')) return;
-    try {
-      const res = await fetch(`${API_URL}/api/projects/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        fetchProjects();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const deleteMessage = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this message?')) return;
-    try {
+  // --- Mutations ---
+  const deleteMessageMutation = useMutation({
+    mutationFn: async (id) => {
       const res = await fetch(`${API_URL}/api/contact/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (res.ok) {
-        fetchMessages();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      if (!res.ok) throw new Error('Failed to delete message');
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['messages'] })
+  });
 
-  const handleProjectSubmit = async (projectData) => {
-    try {
+  const deleteProjectMutation = useMutation({
+    mutationFn: async (id) => {
+      const res = await fetch(`${API_URL}/api/projects/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to delete project');
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] })
+  });
+
+  const saveProjectMutation = useMutation({
+    mutationFn: async (projectData) => {
       const url = editingProject 
         ? `${API_URL}/api/projects/${editingProject._id}`
         : `${API_URL}/api/projects`;
@@ -88,19 +75,37 @@ export default function Dashboard() {
         },
         body: JSON.stringify(projectData)
       });
-
-      if (res.ok) {
-        setIsFormVisible(false);
-        setEditingProject(null);
-        fetchProjects();
-      } else {
+      
+      if (!res.ok) {
         const errorData = await res.json();
-        alert('Failed to save: ' + (errorData.message || 'Unknown error'));
+        throw new Error(errorData.message || 'Failed to save project');
       }
-    } catch (error) {
-      console.error(error);
-      alert('Network error occurred.');
+    },
+    onSuccess: () => {
+      setIsFormVisible(false);
+      setEditingProject(null);
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+    },
+    onError: (error) => {
+      alert('Failed to save: ' + error.message);
     }
+  });
+
+  // --- Handlers ---
+  const deleteProject = (id) => {
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      deleteProjectMutation.mutate(id);
+    }
+  };
+
+  const deleteMessage = (id) => {
+    if (window.confirm('Are you sure you want to delete this message?')) {
+      deleteMessageMutation.mutate(id);
+    }
+  };
+
+  const handleProjectSubmit = (projectData) => {
+    saveProjectMutation.mutate(projectData);
   };
 
   const handleLogout = () => {

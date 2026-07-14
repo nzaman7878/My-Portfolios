@@ -1,30 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { AnimatedSection } from './AnimatedSection';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 export default function Projects() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-        const res = await fetch(`${API_URL}/api/projects`);
-        const data = await res.json();
-        if (data.success) {
-          setProjects(data.data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch projects:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []);
+  const { data: projects = [], isLoading: loading } = useQuery({
+    queryKey: ['projects'],
+    queryFn: async () => {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/projects`);
+      if (!res.ok) throw new Error('Failed to fetch projects');
+      const data = await res.json();
+      return data.data;
+    }
+  });
 
   if (loading) {
     return (

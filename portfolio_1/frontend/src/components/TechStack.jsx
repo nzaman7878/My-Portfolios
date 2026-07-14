@@ -1,28 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { AnimatedSection } from './AnimatedSection';
 
 export default function TechStack() {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-        const res = await fetch(`${API_URL}/api/skills`);
-        const data = await res.json();
-        if (data.success) {
-          setCategories(data.data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch skills:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSkills();
-  }, []);
+  const { data: categories = [], isLoading: loading } = useQuery({
+    queryKey: ['skills'],
+    queryFn: async () => {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/skills`);
+      if (!res.ok) throw new Error('Failed to fetch skills');
+      const data = await res.json();
+      return data.data;
+    }
+  });
 
   if (loading) {
     return (
