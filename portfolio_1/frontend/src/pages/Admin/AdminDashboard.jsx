@@ -1,37 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMessages, useDeleteMessage } from '../../hooks/useContact';
 import toast from 'react-hot-toast';
 
 export default function AdminDashboard() {
-  const queryClient = useQueryClient();
-  const token = localStorage.getItem('adminToken');
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: messages = [], isLoading } = useQuery({
-    queryKey: ['messages'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/contact`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to fetch messages');
-      const data = await res.json();
-      return data.data;
-    }
-  });
-
-  const deleteMessageMutation = useMutation({
-    mutationFn: async (id) => {
-      const res = await fetch(`${API_URL}/api/contact/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to delete message');
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['messages'] });
-      toast.success('Message deleted');
-    },
-    onError: () => toast.error('Failed to delete message')
-  });
+  const { data: messages = [], isLoading } = useMessages();
+  const deleteMessageMutation = useDeleteMessage();
 
   const deleteMessage = (id) => {
     if (window.confirm('Are you sure you want to delete this message?')) {

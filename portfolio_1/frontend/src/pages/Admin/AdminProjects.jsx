@@ -1,73 +1,15 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import ProjectForm from './ProjectForm';
+import { useProjects, useCreateProject, useUpdateProject, useDeleteProject } from '../../hooks/useProjects';
+import ProjectForm from '../../components/admin/ProjectForm';
 
 export default function AdminProjects() {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
 
-  const queryClient = useQueryClient();
-  const token = localStorage.getItem('adminToken');
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: projects = [], isLoading } = useQuery({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/projects`);
-      if (!res.ok) throw new Error('Failed to fetch projects');
-      const data = await res.json();
-      return data.data;
-    }
-  });
-
-  const deleteProjectMutation = useMutation({
-    mutationFn: async (id) => {
-      const res = await fetch(`${API_URL}/api/projects/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to delete project');
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-      toast.success('Project deleted');
-    },
-    onError: () => toast.error('Failed to delete project')
-  });
-
-  const saveProjectMutation = useMutation({
-    mutationFn: async (projectData) => {
-      const url = editingProject 
-        ? `${API_URL}/api/projects/${editingProject._id}`
-        : `${API_URL}/api/projects`;
-      
-      const method = editingProject ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify(projectData)
-      });
-      
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to save project');
-      }
-    },
-    onSuccess: () => {
-      setIsFormVisible(false);
-      setEditingProject(null);
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-      toast.success(editingProject ? 'Project updated!' : 'Project created!');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    }
-  });
+  const { data: projects = [], isLoading } = useProjects();
+  const deleteProjectMutation = useDeleteProject();
+  const createProjectMutation = useCreateProject();
+  const updateProjectMutation = useUpdateProject();
 
   const deleteProject = (id) => {
     if (window.confirm('Are you sure you want to delete this project?')) {
@@ -76,7 +18,20 @@ export default function AdminProjects() {
   };
 
   const handleProjectSubmit = (projectData) => {
-    saveProjectMutation.mutate(projectData);
+    if (editingProject) {
+      updateProjectMutation.mutate({ id: editingProject._id, data: projectData }, {
+        onSuccess: () => {
+          setIsFormVisible(false);
+          setEditingProject(null);
+        }
+      });
+    } else {
+      createProjectMutation.mutate(projectData, {
+        onSuccess: () => {
+          setIsFormVisible(false);
+        }
+      });
+    }
   };
 
   if (isLoading) return <div className="text-[var(--color-secondary-text)]">Loading projects...</div>;

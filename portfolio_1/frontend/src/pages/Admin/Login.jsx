@@ -1,35 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { useLogin } from '../../hooks/useAuth';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const loginMutation = useLogin();
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-
-    try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const res = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Login failed');
+    loginMutation.mutate({ email, password }, {
+      onSuccess: () => {
+        navigate('/admin/dashboard');
       }
-
-      localStorage.setItem('adminToken', data.data.token);
-      toast.success('Login successful');
-      navigate('/admin/dashboard');
-    } catch (err) {
-      toast.error(err.message);
-    }
+    });
   };
 
   return (

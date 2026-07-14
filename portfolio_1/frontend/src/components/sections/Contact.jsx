@@ -1,8 +1,9 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useSubmitMessage } from '../../hooks/useContact';
+import { useSettings } from '../../hooks/useSettings';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { AnimatedSection } from './AnimatedSection';
+import { AnimatedSection } from '../common/AnimatedSection';
 import { FaEnvelope, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 // Define the validation schema using Zod
@@ -13,16 +14,7 @@ const contactSchema = z.object({
 });
 
 export default function Contact() {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: settings } = useQuery({
-    queryKey: ['settings'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/settings`);
-      if (!res.ok) throw new Error('Failed to fetch settings');
-      return res.json();
-    }
-  });
+  const { data: settings } = useSettings();
 
   const socials = settings?.socials || { email: '', github: '', linkedin: '' };
 
@@ -36,28 +28,15 @@ export default function Contact() {
     defaultValues: { name: '', email: '', message: '' }
   });
 
-  const contactMutation = useMutation({
-    mutationFn: async (data) => {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData.message || 'Something went wrong');
-      }
-      return responseData;
-    },
-    onSuccess: () => {
-      reset();
-      setTimeout(() => contactMutation.reset(), 5000);
-    }
-  });
+  const contactMutation = useSubmitMessage();
 
   const onSubmit = (data) => {
-    contactMutation.mutate(data);
+    contactMutation.mutate(data, {
+      onSuccess: () => {
+        reset();
+        setTimeout(() => contactMutation.reset(), 5000);
+      }
+    });
   };
 
   return (

@@ -1,18 +1,8 @@
-import { AnimatedSection } from './AnimatedSection';
-import { useQuery } from '@tanstack/react-query';
+import { AnimatedSection } from '../common/AnimatedSection';
+import { useExperience } from '../../hooks/useExperience';
 
 export default function ExperienceTimeline() {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: experiences = [], isLoading } = useQuery({
-    queryKey: ['experiences'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/experience`);
-      if (!res.ok) throw new Error('Failed to fetch experiences');
-      const data = await res.json();
-      return data.data;
-    }
-  });
+  const { data: experiences = [], isLoading } = useExperience();
 
   if (isLoading) return null;
 

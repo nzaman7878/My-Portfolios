@@ -1,17 +1,8 @@
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
+import { useSettings } from '../../hooks/useSettings';
 
 export default function Hero() {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: settings, isLoading } = useQuery({
-    queryKey: ['settings'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/settings`);
-      if (!res.ok) throw new Error('Failed to fetch settings');
-      return res.json();
-    }
-  });
+  const { data: settings, isLoading } = useSettings();
 
   if (isLoading || !settings) {
     return <section className="min-h-screen flex items-center justify-center"></section>;

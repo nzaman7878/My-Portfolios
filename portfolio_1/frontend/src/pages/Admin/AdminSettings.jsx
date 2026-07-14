@@ -1,27 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { useSettings, useUpdateSettings } from '../../hooks/useSettings';
 
 export default function AdminSettings() {
-  const queryClient = useQueryClient();
-  const token = localStorage.getItem('adminToken');
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
   const [formData, setFormData] = useState({
     hero: { statusTag: '', title: '', subtitle: '', resumeUrl: '' },
-    about: { quote: '', paragraphs: '' }, // paragraphs as a single string to edit
+    about: { quote: '', paragraphs: '' },
     philosophy: { mainQuote: '', subtext: '' },
     socials: { email: '', github: '', linkedin: '' }
   });
 
-  const { data: settings, isLoading } = useQuery({
-    queryKey: ['settings'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/settings`);
-      if (!res.ok) throw new Error('Failed to fetch settings');
-      return res.json();
-    }
-  });
+  const { data: settings, isLoading } = useSettings();
 
   useEffect(() => {
     if (settings) {
@@ -37,33 +25,18 @@ export default function AdminSettings() {
     }
   }, [settings]);
 
-  const updateSettingsMutation = useMutation({
-    mutationFn: async (updatedData) => {
-      // Convert paragraphs back to array
-      const dataToSubmit = {
-        ...updatedData,
-        about: {
-          ...updatedData.about,
-          paragraphs: updatedData.about.paragraphs.split('\n\n').filter(p => p.trim() !== '')
-        }
-      };
+  const updateSettingsMutation = useUpdateSettings();
 
-      const res = await fetch(`${API_URL}/api/settings`, {
-        method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify(dataToSubmit)
-      });
-      if (!res.ok) throw new Error('Failed to update settings');
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['settings'] });
-      toast.success('Settings updated successfully!');
-    },
-    onError: () => toast.error('Failed to update settings')
-  });
+  const handleFormSubmit = () => {
+    const dataToSubmit = {
+      ...formData,
+      about: {
+        ...formData.about,
+        paragraphs: formData.about.paragraphs.split('\n\n').filter(p => p.trim() !== '')
+      }
+    };
+    updateSettingsMutation.mutate(dataToSubmit);
+  };
 
   const handleChange = (section, field, value) => {
     setFormData(prev => ({
@@ -77,7 +50,7 @@ export default function AdminSettings() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateSettingsMutation.mutate(formData);
+    handleFormSubmit();
   };
 
   if (isLoading) return <div className="text-[var(--color-secondary-text)]">Loading settings...</div>;

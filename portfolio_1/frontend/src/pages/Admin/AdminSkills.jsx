@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { useSkills, useCreateSkill, useUpdateSkill, useDeleteSkill } from '../../hooks/useSkills';
 
 export default function AdminSkills() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -12,68 +11,10 @@ export default function AdminSkills() {
     order: 0
   });
 
-  const queryClient = useQueryClient();
-  const token = localStorage.getItem('adminToken');
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: skillsList = [], isLoading } = useQuery({
-    queryKey: ['skills'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/skills`);
-      if (!res.ok) throw new Error('Failed to fetch skills');
-      const data = await res.json();
-      return data.data;
-    }
-  });
-
-  const deleteSkillMutation = useMutation({
-    mutationFn: async (id) => {
-      const res = await fetch(`${API_URL}/api/skills/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to delete skill category');
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['skills'] });
-      toast.success('Skill category deleted');
-    },
-    onError: () => toast.error('Failed to delete skill category')
-  });
-
-  const saveSkillMutation = useMutation({
-    mutationFn: async (skillData) => {
-      const url = editingSkill 
-        ? `${API_URL}/api/skills/${editingSkill._id}`
-        : `${API_URL}/api/skills`;
-      
-      const method = editingSkill ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify(skillData)
-      });
-      
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to save skill category');
-      }
-    },
-    onSuccess: () => {
-      setIsFormVisible(false);
-      setEditingSkill(null);
-      resetForm();
-      queryClient.invalidateQueries({ queryKey: ['skills'] });
-      toast.success(editingSkill ? 'Skill category updated!' : 'Skill category created!');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    }
-  });
+  const { data: skillsList = [], isLoading } = useSkills();
+  const deleteSkillMutation = useDeleteSkill();
+  const createSkillMutation = useCreateSkill();
+  const updateSkillMutation = useUpdateSkill();
 
   const resetForm = () => {
     setFormData({ title: '', skills: '', order: 0 });
@@ -102,7 +43,23 @@ export default function AdminSkills() {
       ...formData,
       skills: formData.skills.split(',').map(s => s.trim()).filter(s => s)
     };
-    saveSkillMutation.mutate(formattedData);
+    
+    if (editingSkill) {
+      updateSkillMutation.mutate({ id: editingSkill._id, data: formattedData }, {
+        onSuccess: () => {
+          setIsFormVisible(false);
+          setEditingSkill(null);
+          resetForm();
+        }
+      });
+    } else {
+      createSkillMutation.mutate(formattedData, {
+        onSuccess: () => {
+          setIsFormVisible(false);
+          resetForm();
+        }
+      });
+    }
   };
 
   if (isLoading) return <div className="text-[var(--color-secondary-text)]">Loading skills...</div>;
@@ -141,8 +98,8 @@ export default function AdminSkills() {
             </div>
             
             <div className="flex gap-4 mt-4">
-              <button type="submit" disabled={saveSkillMutation.isPending} className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:opacity-90 disabled:opacity-50">
-                {saveSkillMutation.isPending ? 'Saving...' : 'Save Category'}
+              <button type="submit" disabled={updateSkillMutation.isPending || createSkillMutation.isPending} className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:opacity-90 disabled:opacity-50">
+                {(updateSkillMutation.isPending || createSkillMutation.isPending) ? 'Saving...' : 'Save Category'}
               </button>
               <button type="button" onClick={() => setIsFormVisible(false)} className="px-6 py-2 border-thin rounded hover:bg-[var(--color-border-custom)] transition-colors">
                 Cancel

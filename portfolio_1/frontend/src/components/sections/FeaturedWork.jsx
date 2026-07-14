@@ -1,20 +1,10 @@
 import { motion } from 'framer-motion';
 import { FaArrowRight, FaGithub } from 'react-icons/fa';
-import { AnimatedSection } from './AnimatedSection';
-import { useQuery } from '@tanstack/react-query';
+import { AnimatedSection } from '../common/AnimatedSection';
+import { useProjects } from '../../hooks/useProjects';
 
 export default function FeaturedWork() {
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: projects = [], isLoading } = useQuery({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/projects`);
-      if (!res.ok) throw new Error('Failed to fetch projects');
-      const data = await res.json();
-      return data.data;
-    }
-  });
+  const { data: projects = [], isLoading } = useProjects();
 
   if (isLoading || projects.length === 0) return null;
 

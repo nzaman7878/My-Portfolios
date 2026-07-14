@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { useExperience, useCreateExperience, useUpdateExperience, useDeleteExperience } from '../../hooks/useExperience';
 
 export default function AdminExperience() {
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -14,68 +13,10 @@ export default function AdminExperience() {
     order: 0
   });
 
-  const queryClient = useQueryClient();
-  const token = localStorage.getItem('adminToken');
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-  const { data: experiences = [], isLoading } = useQuery({
-    queryKey: ['experiences'],
-    queryFn: async () => {
-      const res = await fetch(`${API_URL}/api/experience`);
-      if (!res.ok) throw new Error('Failed to fetch experiences');
-      const data = await res.json();
-      return data.data;
-    }
-  });
-
-  const deleteExpMutation = useMutation({
-    mutationFn: async (id) => {
-      const res = await fetch(`${API_URL}/api/experience/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to delete experience');
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['experiences'] });
-      toast.success('Experience deleted');
-    },
-    onError: () => toast.error('Failed to delete experience')
-  });
-
-  const saveExpMutation = useMutation({
-    mutationFn: async (expData) => {
-      const url = editingExp 
-        ? `${API_URL}/api/experience/${editingExp._id}`
-        : `${API_URL}/api/experience`;
-      
-      const method = editingExp ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}` 
-        },
-        body: JSON.stringify(expData)
-      });
-      
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to save experience');
-      }
-    },
-    onSuccess: () => {
-      setIsFormVisible(false);
-      setEditingExp(null);
-      resetForm();
-      queryClient.invalidateQueries({ queryKey: ['experiences'] });
-      toast.success(editingExp ? 'Experience updated!' : 'Experience created!');
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    }
-  });
+  const { data: experiences = [], isLoading } = useExperience();
+  const deleteExpMutation = useDeleteExperience();
+  const createExpMutation = useCreateExperience();
+  const updateExpMutation = useUpdateExperience();
 
   const resetForm = () => {
     setFormData({ title: '', institution: '', period: '', description: '', order: 0 });
@@ -102,7 +43,22 @@ export default function AdminExperience() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    saveExpMutation.mutate(formData);
+    if (editingExp) {
+      updateExpMutation.mutate({ id: editingExp._id, data: formData }, {
+        onSuccess: () => {
+          setIsFormVisible(false);
+          setEditingExp(null);
+          resetForm();
+        }
+      });
+    } else {
+      createExpMutation.mutate(formData, {
+        onSuccess: () => {
+          setIsFormVisible(false);
+          resetForm();
+        }
+      });
+    }
   };
 
   if (isLoading) return <div className="text-[var(--color-secondary-text)]">Loading experiences...</div>;
@@ -150,8 +106,8 @@ export default function AdminExperience() {
             </div>
             
             <div className="flex gap-4 mt-4">
-              <button type="submit" disabled={saveExpMutation.isPending} className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:opacity-90 disabled:opacity-50">
-                {saveExpMutation.isPending ? 'Saving...' : 'Save Experience'}
+              <button type="submit" disabled={updateExpMutation.isPending || createExpMutation.isPending} className="px-6 py-2 bg-[var(--color-accent)] text-[var(--color-background)] font-medium rounded hover:opacity-90 disabled:opacity-50">
+                {(updateExpMutation.isPending || createExpMutation.isPending) ? 'Saving...' : 'Save Experience'}
               </button>
               <button type="button" onClick={() => setIsFormVisible(false)} className="px-6 py-2 border-thin rounded hover:bg-[var(--color-border-custom)] transition-colors">
                 Cancel

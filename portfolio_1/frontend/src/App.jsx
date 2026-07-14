@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
-import Login from './components/Admin/Login';
-import AdminLayout from './components/Admin/AdminLayout';
-import AdminDashboard from './components/Admin/AdminDashboard';
-import AdminProjects from './components/Admin/AdminProjects';
-import AdminSettings from './components/Admin/AdminSettings';
-import AdminExperience from './components/Admin/AdminExperience';
-import AdminSkills from './components/Admin/AdminSkills';
-import SEO from './components/SEO';
-import ProtectedRoute from './components/Admin/ProtectedRoute';
+import Login from './pages/Admin/Login';
+import AdminLayout from './layouts/AdminLayout';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import AdminProjects from './pages/Admin/AdminProjects';
+import AdminSettings from './pages/Admin/AdminSettings';
+import AdminExperience from './pages/Admin/AdminExperience';
+import AdminSkills from './pages/Admin/AdminSkills';
+import SEO from './components/common/SEO';
+import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function App() {
   return (

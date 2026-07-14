@@ -1,19 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
+import { useProjects } from '../../hooks/useProjects';
 import { motion } from 'framer-motion';
-import { AnimatedSection } from './AnimatedSection';
+import { AnimatedSection } from '../common/AnimatedSection';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
 export default function Projects() {
-  const { data: projects = [], isLoading: loading } = useQuery({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const res = await fetch(`${API_URL}/api/projects`);
-      if (!res.ok) throw new Error('Failed to fetch projects');
-      const data = await res.json();
-      return data.data;
-    }
-  });
+  const { data: projects = [], isLoading: loading } = useProjects();
 
   if (loading) {
     return (
