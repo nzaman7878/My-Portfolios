@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 export const useSettings = () => {
   return useQuery({
     queryKey: ['settings'],
-    queryFn: () => settingsApi.getSettings().then(res => res.data),
+    queryFn: () => settingsApi.getSettings(),
     staleTime: 5 * 60 * 1000,
   });
 };
