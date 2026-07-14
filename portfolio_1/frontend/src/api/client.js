@@ -12,13 +12,8 @@ class ApiClient {
       ...options.headers,
     };
 
-    // Add token if exists
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
     const config = {
+      credentials: 'include', // Send cookies with request
       ...options,
       headers,
     };

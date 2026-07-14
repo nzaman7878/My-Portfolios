@@ -8,12 +8,26 @@ export const useLogin = () => {
       const data = await authApi.login(credentials);
       return data;
     },
-    onSuccess: (data) => {
-      localStorage.setItem('adminToken', data.data.token);
+    onSuccess: () => {
       toast.success('Login successful');
     },
     onError: (error) => {
       toast.error(error.message || 'Login failed');
+    }
+  });
+};
+
+export const useLogout = () => {
+  return useMutation({
+    mutationFn: async () => {
+      const data = await authApi.logout();
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Logged out successfully');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Logout failed');
     }
   });
 };

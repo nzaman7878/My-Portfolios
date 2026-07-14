@@ -7,7 +7,19 @@ const { errorHandler } = require('./middlewares/errorHandler');
 const app = express();
 
 // Middlewares
+const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
+
 app.use(express.json());
+app.use(cookieParser());
+
+// Global Rate Limiter
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: { success: false, message: 'Too many requests, please try again later.' }
+});
+app.use('/api', limiter);
 const allowedOrigins = process.env.ALLOWED_ORIGINS 
   ? process.env.ALLOWED_ORIGINS.split(',') 
   : ['http://localhost:5173'];

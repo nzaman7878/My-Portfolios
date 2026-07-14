@@ -1,12 +1,21 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from '../components/common/ErrorFallback';
+import { useLogout } from '../hooks/useAuth';
+import { useQueryClient } from '@tanstack/react-query';
+
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const logoutMutation = useLogout();
+  const queryClient = useQueryClient();
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    navigate('/admin/login');
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        queryClient.clear();
+        navigate('/admin/login');
+      }
+    });
   };
 
   const navItems = [
