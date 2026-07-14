@@ -1,4 +1,5 @@
 const Message = require('../models/Message');
+const sendEmail = require('../utils/sendEmail');
 const { z } = require('zod');
 
 // Define validation schema using Zod
@@ -14,25 +15,50 @@ const contactSchema = z.object({
 const submitMessage = async (req, res, next) => {
   try {
     // 1. Validate incoming data
-    const validatedData = contactSchema.parse(req.body);
+    const { name, email, message: messageText } = contactSchema.parse(req.body);
 
     // 2. Save to database
-    const newMessage = await Message.create(validatedData);
+    const message = await Message.create({
+      name,
+      email,
+      message: messageText
+    });
+
+    // Attempt to send email notification
+    try {
+      const emailReceiver = process.env.EMAIL_RECEIVER || 'nuruzzaman@example.com';
+      await sendEmail({
+        to: emailReceiver,
+        subject: `New Portfolio Message from ${name}`,
+        text: `You have received a new message from your portfolio contact form.\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${messageText}`,
+        html: `
+          <h3>New Portfolio Message</h3>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${messageText.replace(/\n/g, '<br>')}</p>
+        `
+      });
+    } catch (emailError) {
+      console.error('Email could not be sent:', emailError);
+      // We don't throw the error because we still want the user to see a success message
+      // since the database save was successful.
+    }
 
     // 3. Respond
     res.status(201).json({
       success: true,
       message: 'Message received successfully!',
       data: {
-        id: newMessage._id,
-        createdAt: newMessage.createdAt
+        id: message._id,
+        createdAt: message.createdAt
       }
     });
 
   } catch (error) {
     // If Zod validation fails, format the error nicely
     if (error instanceof z.ZodError) {
-      const formattedErrors = error.errors.map(err => err.message).join(', ');
+      const formattedErrors = error.issues.map(err => err.message).join(', ');
       res.status(400);
       return next(new Error(`Validation Error: ${formattedErrors}`));
     }
