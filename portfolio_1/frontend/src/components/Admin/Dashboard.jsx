@@ -13,6 +13,7 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
   const token = localStorage.getItem('adminToken');
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   useEffect(() => {
     fetchMessages();
@@ -21,7 +22,7 @@ export default function Dashboard() {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/contact', {
+      const res = await fetch(`${API_URL}/api/contact`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -33,7 +34,7 @@ export default function Dashboard() {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/projects');
+      const res = await fetch(`${API_URL}/api/projects`);
       const data = await res.json();
       if (res.ok) setProjects(data.data);
     } catch (error) {
@@ -44,7 +45,7 @@ export default function Dashboard() {
   const deleteProject = async (id) => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/projects/${id}`, {
+      const res = await fetch(`${API_URL}/api/projects/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -59,7 +60,7 @@ export default function Dashboard() {
   const deleteMessage = async (id) => {
     if (!window.confirm('Are you sure you want to delete this message?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/contact/${id}`, {
+      const res = await fetch(`${API_URL}/api/contact/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -74,8 +75,8 @@ export default function Dashboard() {
   const handleProjectSubmit = async (projectData) => {
     try {
       const url = editingProject 
-        ? `http://localhost:5000/api/projects/${editingProject._id}`
-        : 'http://localhost:5000/api/projects';
+        ? `${API_URL}/api/projects/${editingProject._id}`
+        : `${API_URL}/api/projects`;
       
       const method = editingProject ? 'PUT' : 'POST';
 
