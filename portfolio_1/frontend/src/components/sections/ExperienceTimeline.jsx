@@ -1,10 +1,34 @@
 import { AnimatedSection } from '../common/AnimatedSection';
 import { useExperience } from '../../hooks/useExperience';
+import { Skeleton } from '../common/Skeleton';
 
 export default function ExperienceTimeline() {
   const { data: experiences = [], isLoading } = useExperience();
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return (
+      <section className="py-24">
+        <div className="mb-24 flex flex-col gap-4">
+          <Skeleton className="h-14 w-80" />
+          <div className="h-[1px] w-full max-w-sm bg-[var(--color-border-custom)]"></div>
+        </div>
+        <div className="relative border-l border-[var(--color-border-custom)] ml-4 md:ml-6 space-y-20 pb-12">
+          {[1, 2].map((i) => (
+            <div key={i} className="relative pl-12 md:pl-16">
+              <div className="absolute left-[-5px] top-2 w-[9px] h-[9px] bg-[var(--color-background)] border-2 border-[var(--color-accent-secondary)] rounded-full"></div>
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-8 w-64" />
+                <Skeleton className="h-6 w-48" />
+                <Skeleton className="h-4 w-full max-w-2xl mt-4" />
+                <Skeleton className="h-4 w-3/4 max-w-2xl" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <AnimatedSection id="experience">

@@ -1,11 +1,22 @@
 import { motion } from 'framer-motion';
 import { useSettings } from '../../hooks/useSettings';
+import { Skeleton } from '../common/Skeleton';
 
 export default function Hero() {
   const { data: settings, isLoading } = useSettings();
 
   if (isLoading || !settings) {
-    return <section className="min-h-screen flex items-center justify-center"></section>;
+    return (
+      <section className="min-h-screen flex flex-col justify-center py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
+        <Skeleton className="h-8 w-32 mb-8 rounded-full" />
+        <Skeleton className="h-24 md:h-32 lg:h-40 w-3/4 mb-8" />
+        <Skeleton className="h-16 w-1/2 mb-12" />
+        <div className="flex gap-4">
+          <Skeleton className="h-12 w-40 rounded-full" />
+          <Skeleton className="h-12 w-32 rounded-full" />
+        </div>
+      </section>
+    );
   }
 
   const { hero } = settings;

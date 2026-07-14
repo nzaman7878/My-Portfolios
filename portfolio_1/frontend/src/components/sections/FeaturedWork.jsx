@@ -2,11 +2,33 @@ import { motion } from 'framer-motion';
 import { FaArrowRight, FaGithub } from 'react-icons/fa';
 import { AnimatedSection } from '../common/AnimatedSection';
 import { useProjects } from '../../hooks/useProjects';
+import { Skeleton } from '../common/Skeleton';
 
 export default function FeaturedWork() {
   const { data: projects = [], isLoading } = useProjects();
 
-  if (isLoading || projects.length === 0) return null;
+  if (isLoading) {
+    return (
+      <section className="py-24">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+          <div className="max-w-2xl w-full">
+            <Skeleton className="h-12 w-64 mb-4" />
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-6">
+          <Skeleton className="w-full h-[400px] rounded-xl" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Skeleton className="w-full h-80 rounded-xl" />
+            <Skeleton className="w-full h-80 rounded-xl" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (projects.length === 0) return null;
 
   const topProjects = projects.slice(0, 3); // Grab up to 3 projects for the featured section
   const firstProject = topProjects[0];

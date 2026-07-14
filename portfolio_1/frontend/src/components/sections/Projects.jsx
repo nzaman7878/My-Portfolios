@@ -2,17 +2,37 @@ import { useProjects } from '../../hooks/useProjects';
 import { motion } from 'framer-motion';
 import { AnimatedSection } from '../common/AnimatedSection';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { Skeleton } from '../common/Skeleton';
 
 export default function Projects() {
   const { data: projects = [], isLoading: loading } = useProjects();
 
   if (loading) {
     return (
-      <AnimatedSection id="projects" className="py-24">
-        <div className="flex justify-center items-center h-64">
-          <p className="text-[var(--color-secondary-text)]">Loading projects...</p>
+      <section className="py-24">
+        <div className="flex flex-col mb-16 gap-4">
+          <Skeleton className="h-12 w-64" />
+          <Skeleton className="h-4 w-full max-w-2xl" />
+          <Skeleton className="h-4 w-3/4 max-w-2xl" />
         </div>
-      </AnimatedSection>
+        <div className="flex flex-col gap-24">
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-3">
+              <Skeleton className="h-6 w-24 rounded" />
+              <Skeleton className="h-10 w-96 rounded" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+              <div className="md:col-span-8">
+                <Skeleton className="w-full h-80 rounded-xl" />
+              </div>
+              <div className="md:col-span-4 flex flex-col gap-8">
+                <Skeleton className="w-full h-32 rounded-xl" />
+                <Skeleton className="w-full h-32 rounded-xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     );
   }
 

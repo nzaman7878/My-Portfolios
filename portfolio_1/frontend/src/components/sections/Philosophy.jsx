@@ -1,10 +1,21 @@
 import { AnimatedSection } from '../common/AnimatedSection';
 import { useSettings } from '../../hooks/useSettings';
+import { Skeleton } from '../common/Skeleton';
 
 export default function Philosophy() {
   const { data: settings, isLoading } = useSettings();
 
-  if (isLoading || !settings) return null;
+  if (isLoading || !settings) {
+    return (
+      <section className="py-40 flex items-center justify-center bg-[var(--color-background)]">
+        <div className="max-w-5xl mx-auto w-full px-6 flex flex-col items-center gap-8">
+          <Skeleton className="h-16 w-3/4 max-w-2xl" />
+          <Skeleton className="h-16 w-2/3 max-w-xl" />
+          <Skeleton className="h-6 w-1/2 mt-4" />
+        </div>
+      </section>
+    );
+  }
 
   const { philosophy } = settings;
 
