@@ -11,6 +11,7 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
     techStack: '',
     github: '',
     demo: '',
+    image: '',
     order: 0
   });
 
@@ -26,6 +27,7 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
         techStack: project.techStack ? project.techStack.join(', ') : '',
         github: project.github || '',
         demo: project.demo || '',
+        image: project.image || '',
         order: project.order || 0
       });
     } else {
@@ -40,6 +42,7 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
         techStack: '',
         github: '',
         demo: '',
+        image: '',
         order: 0
       });
     }
@@ -48,6 +51,42 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    const formDataObj = new FormData();
+    formDataObj.append('image', file);
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const token = localStorage.getItem('adminToken');
+      
+      const res = await fetch(`${API_URL}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formDataObj
+      });
+      
+      const data = await res.json();
+      if (data.success) {
+        setFormData(prev => ({ ...prev, image: data.url }));
+      } else {
+        alert(data.message || 'Image upload failed');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error uploading image');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -63,6 +102,34 @@ export default function ProjectForm({ project, onSubmit, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-[var(--color-surface)] p-6 rounded-lg border border-[var(--color-border-custom)]">
       <h2 className="text-2xl font-serif mb-4">{project ? 'Edit Project' : 'Add New Project'}</h2>
+      
+      <div className="flex flex-col gap-2 p-4 border border-dashed border-[var(--color-border-custom)] rounded-lg bg-[var(--color-background)]">
+        <label className="text-sm font-mono text-[var(--color-secondary-text)]">Project Image</label>
+        
+        {formData.image && (
+          <div className="relative w-full h-48 mb-2 rounded overflow-hidden">
+            <img src={formData.image} alt="Project Preview" className="object-cover w-full h-full" />
+            <button 
+              type="button" 
+              onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+              className="absolute top-2 right-2 bg-red-500 text-white p-1 text-xs rounded hover:bg-red-600"
+            >
+              Remove
+            </button>
+          </div>
+        )}
+
+        <div className="flex items-center gap-4">
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleImageUpload} 
+            disabled={uploadingImage}
+            className="text-sm text-[var(--color-secondary-text)] file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[var(--color-surface)] file:text-[var(--color-primary-text)] hover:file:bg-[var(--color-border-custom)]"
+          />
+          {uploadingImage && <span className="text-sm text-[var(--color-accent)] animate-pulse">Uploading...</span>}
+        </div>
+      </div>
       
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1">

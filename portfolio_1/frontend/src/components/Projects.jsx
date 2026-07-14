@@ -62,6 +62,12 @@ export default function Projects() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
               <div className="md:col-span-8 flex flex-col gap-8 bg-[var(--color-surface)] p-8 md:p-10 rounded-xl border-thin">
                 
+                {project.image && (
+                  <div className="w-full rounded-lg overflow-hidden border border-[var(--color-border-custom)] mb-4">
+                    <img src={project.image} alt={project.title} className="w-full h-auto object-cover" />
+                  </div>
+                )}
+
                 <div>
                   <h4 className="text-[var(--color-primary-text)] font-medium mb-2 uppercase tracking-wide text-xs">The Problem</h4>
                   <p className="text-[var(--color-secondary-text)] font-light text-sm leading-relaxed">{project.problem}</p>
