@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -13,6 +13,19 @@ const contactSchema = z.object({
 });
 
 export default function Contact() {
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  const { data: settings } = useQuery({
+    queryKey: ['settings'],
+    queryFn: async () => {
+      const res = await fetch(`${API_URL}/api/settings`);
+      if (!res.ok) throw new Error('Failed to fetch settings');
+      return res.json();
+    }
+  });
+
+  const socials = settings?.socials || { email: '', github: '', linkedin: '' };
+
   const {
     register,
     handleSubmit,
@@ -127,26 +140,30 @@ export default function Contact() {
           </div>
           
           <div className="flex flex-col gap-6">
-            <a href="mailto:nuruzzaman@example.com" className="flex items-center gap-4 group w-fit">
+            <a href={`mailto:${socials.email}`} className="flex items-center gap-4 group w-fit">
               <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-accent)] transition-colors">
                 <FaEnvelope size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-accent)] transition-colors" />
               </div>
-              <span className="text-lg font-light group-hover:text-[var(--color-accent)] transition-colors">nuruzzaman@example.com</span>
+              <span className="text-lg font-light group-hover:text-[var(--color-accent)] transition-colors">{socials.email}</span>
             </a>
             
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-accent-secondary)] transition-colors">
-                <FaLinkedin size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-accent-secondary)] transition-colors" />
-              </div>
-              <span className="text-lg font-light group-hover:text-[var(--color-accent-secondary)] transition-colors">LinkedIn</span>
-            </a>
+            {socials.linkedin && (
+              <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group w-fit">
+                <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-accent-secondary)] transition-colors">
+                  <FaLinkedin size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-accent-secondary)] transition-colors" />
+                </div>
+                <span className="text-lg font-light group-hover:text-[var(--color-accent-secondary)] transition-colors">LinkedIn</span>
+              </a>
+            )}
 
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group w-fit">
-              <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-primary-text)] transition-colors">
-                <FaGithub size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-primary-text)] transition-colors" />
-              </div>
-              <span className="text-lg font-light group-hover:text-[var(--color-primary-text)] transition-colors">GitHub</span>
-            </a>
+            {socials.github && (
+              <a href={socials.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group w-fit">
+                <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-primary-text)] transition-colors">
+                  <FaGithub size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-primary-text)] transition-colors" />
+                </div>
+                <span className="text-lg font-light group-hover:text-[var(--color-primary-text)] transition-colors">GitHub</span>
+              </a>
+            )}
           </div>
         </div>
 

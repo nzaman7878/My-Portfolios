@@ -1,8 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
 import Login from './components/Admin/Login';
-import Dashboard from './components/Admin/Dashboard';
+import AdminLayout from './components/Admin/AdminLayout';
+import AdminDashboard from './components/Admin/AdminDashboard';
+import AdminProjects from './components/Admin/AdminProjects';
+import AdminSettings from './components/Admin/AdminSettings';
+import AdminExperience from './components/Admin/AdminExperience';
+import AdminSkills from './components/Admin/AdminSkills';
 import SEO from './components/SEO';
 import ProtectedRoute from './components/Admin/ProtectedRoute';
 
@@ -27,13 +32,16 @@ function App() {
       <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-primary-text)] font-sans selection:bg-[var(--color-accent)] selection:text-white overflow-x-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/admin" element={<Login />} />
           <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin/dashboard" element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } />
+          
+          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="settings" element={<AdminSettings />} />
+            <Route path="projects" element={<AdminProjects />} />
+            <Route path="experience" element={<AdminExperience />} />
+            <Route path="skills" element={<AdminSkills />} />
+          </Route>
         </Routes>
       </div>
     </Router>
