@@ -33,9 +33,20 @@ export default function About() {
         
         {/* Left Column */}
         <div className="w-full lg:w-[40%] flex flex-col gap-12">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight text-[var(--color-primary-text)] leading-tight">
-            About
-          </h2>
+          <div className="flex flex-col gap-8">
+            <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight text-[var(--color-primary-text)] leading-tight">
+              About
+            </h2>
+            {about.profileImage && (
+              <div className="w-48 h-48 md:w-56 md:h-56 rounded-2xl overflow-hidden border-thin">
+                <img 
+                  src={about.profileImage} 
+                  alt="Profile" 
+                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 ease-in-out"
+                />
+              </div>
+            )}
+          </div>
           <blockquote className="text-lg md:text-xl font-serif italic text-[var(--color-secondary-text)] leading-relaxed border-l-2 border-[var(--color-border-custom)] pl-6">
             {about.quote}
           </blockquote>

@@ -14,6 +14,7 @@ const portfolioSettingsSchema = new mongoose.Schema({
     resumeUrl: { type: String, default: '#' }
   },
   about: {
+    profileImage: { type: String, default: '' },
     quote: { type: String, default: '"I\'m a developer who enjoys building products that people genuinely enjoy using."' },
     paragraphs: { 
       type: [String], 

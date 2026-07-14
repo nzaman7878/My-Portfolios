@@ -1,10 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSettings, useUpdateSettings } from '../../hooks/useSettings';
+import { apiClient } from '../../api/client';
+import toast from 'react-hot-toast';
 
 export default function AdminSettings() {
+  const fileInputRef = useRef(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const [formData, setFormData] = useState({
     hero: { statusTag: '', title: '', subtitle: '', resumeUrl: '' },
-    about: { quote: '', paragraphs: '' },
+    about: { quote: '', paragraphs: '', profileImage: '' },
     philosophy: { mainQuote: '', subtext: '' },
     socials: { email: '', github: '', linkedin: '' }
   });
@@ -46,6 +51,30 @@ export default function AdminSettings() {
         [field]: value
       }
     }));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formDataToUpload = new FormData();
+    formDataToUpload.append('image', file);
+
+    try {
+      setIsUploading(true);
+      const res = await apiClient.upload('/api/upload', formDataToUpload);
+      if (res.success) {
+        handleChange('about', 'profileImage', res.url);
+        toast.success('Image uploaded successfully');
+      }
+    } catch (err) {
+      toast.error(err.message || 'Image upload failed');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleSubmit = (e) => {
@@ -95,6 +124,22 @@ export default function AdminSettings() {
         {/* ABOUT SECTION */}
         <section className="flex flex-col gap-4">
           <h3 className="text-xl font-bold text-[var(--color-accent)]">About Section</h3>
+          
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Profile Image</label>
+            <div className="flex items-center gap-4">
+              {formData.about.profileImage && (
+                <div className="relative w-16 h-16 rounded overflow-hidden border border-[var(--color-border-custom)]">
+                  <img src={formData.about.profileImage} alt="Profile preview" className="w-full h-full object-cover" />
+                  <button type="button" onClick={() => handleChange('about', 'profileImage', '')} className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-bl text-xs leading-none hover:bg-red-600">&times;</button>
+                </div>
+              )}
+              <div className="flex-1">
+                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} disabled={isUploading} className="block w-full text-sm text-[var(--color-secondary-text)] file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[var(--color-surface)] file:text-[var(--color-primary-text)] hover:file:bg-[var(--color-border-custom)] border-thin p-2 rounded" />
+                {isUploading && <span className="text-xs text-[var(--color-accent)] mt-1 block">Uploading image...</span>}
+              </div>
+            </div>
+          </div>
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium">Blockquote</label>
             <input type="text" value={formData.about.quote} onChange={(e) => handleChange('about', 'quote', e.target.value)} className="bg-[var(--color-surface)] border-thin p-2 rounded text-sm" />
