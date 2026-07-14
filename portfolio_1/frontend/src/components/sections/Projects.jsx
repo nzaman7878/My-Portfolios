@@ -109,10 +109,10 @@ export default function Projects() {
                 </div>
 
                 <div className="flex gap-4 mt-auto">
-                  <a href={project.github} className="flex-1 flex justify-center items-center gap-2 py-3 border-thin rounded text-[var(--color-primary-text)] hover:text-[var(--color-background)] hover:bg-[var(--color-primary-text)] transition-all text-sm font-medium">
+                  <a href={project.github} className="flex-1 flex justify-center items-center gap-2 py-3 border-thin rounded text-[var(--color-primary-text)] hover:text-white hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] transition-all text-sm font-medium">
                     <FaGithub size={16} /> Code
                   </a>
-                  <a href={project.demo} className="flex-1 flex justify-center items-center gap-2 py-3 bg-[var(--color-accent)] text-[var(--color-background)] rounded hover:bg-opacity-90 transition-all text-sm font-medium">
+                  <a href={project.demo} className="flex-1 flex justify-center items-center gap-2 py-3 bg-[var(--color-accent)] text-[var(--color-background)] rounded hover:opacity-90 transition-all text-sm font-medium">
                     <FaExternalLinkAlt size={14} /> Demo
                   </a>
                 </div>

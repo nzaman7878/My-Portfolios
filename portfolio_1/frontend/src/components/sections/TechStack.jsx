@@ -61,7 +61,7 @@ export default function TechStack() {
                 {category.skills.map((skill, i) => (
                   <div 
                     key={i}
-                    className="px-4 py-2 border-thin rounded text-xs font-medium text-[var(--color-primary-text)] bg-transparent hover:bg-[var(--color-surface)] transition-colors cursor-default"
+                    className="px-4 py-2 border-thin rounded text-xs font-medium text-[var(--color-primary-text)] bg-transparent hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] hover:text-white transition-colors cursor-default"
                   >
                     {skill}
                   </div>

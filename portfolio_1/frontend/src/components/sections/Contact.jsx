@@ -101,7 +101,7 @@ export default function Contact() {
             <button 
               type="submit" 
               disabled={contactMutation.isPending || contactMutation.isSuccess}
-              className="mt-4 px-8 py-4 bg-[var(--color-accent-secondary)] text-white font-medium rounded hover:bg-opacity-90 transition-colors w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-4 px-8 py-4 bg-[var(--color-primary-text)] text-[var(--color-background)] font-medium rounded hover:bg-[var(--color-accent)] hover:text-white transition-colors w-fit disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {contactMutation.isPending ? 'Sending...' : contactMutation.isSuccess ? 'Sent' : 'Send Message'}
             </button>
@@ -128,19 +128,19 @@ export default function Contact() {
             
             {socials.linkedin && (
               <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group w-fit">
-                <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-accent-secondary)] transition-colors">
-                  <FaLinkedin size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-accent-secondary)] transition-colors" />
+                <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-accent)] transition-colors">
+                  <FaLinkedin size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-accent)] transition-colors" />
                 </div>
-                <span className="text-lg font-light group-hover:text-[var(--color-accent-secondary)] transition-colors">LinkedIn</span>
+                <span className="text-lg font-light group-hover:text-[var(--color-accent)] transition-colors">LinkedIn</span>
               </a>
             )}
 
             {socials.github && (
               <a href={socials.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 group w-fit">
-                <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-primary-text)] transition-colors">
-                  <FaGithub size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-primary-text)] transition-colors" />
+                <div className="p-4 border-thin bg-surface rounded group-hover:border-[var(--color-accent)] transition-colors">
+                  <FaGithub size={24} className="text-[var(--color-secondary-text)] group-hover:text-[var(--color-accent)] transition-colors" />
                 </div>
-                <span className="text-lg font-light group-hover:text-[var(--color-primary-text)] transition-colors">GitHub</span>
+                <span className="text-lg font-light group-hover:text-[var(--color-accent)] transition-colors">GitHub</span>
               </a>
             )}
           </div>
