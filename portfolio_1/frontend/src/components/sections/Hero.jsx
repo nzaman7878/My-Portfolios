@@ -21,6 +21,18 @@ export default function Hero() {
 
   const { hero } = settings;
 
+  const formatTitle = (title) => {
+    if (!title) return null;
+    const parts = title.split(/(MERN and AI|MERN \+ AI)/gi);
+    return parts.map((part, i) => 
+      /MERN and AI|MERN \+ AI/i.test(part) ? (
+        <span key={i} className="text-[var(--color-accent)]">{part}</span>
+      ) : (
+        part
+      )
+    );
+  };
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center py-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
       <div className="relative z-10 flex flex-col items-start w-full">
@@ -44,7 +56,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="text-6xl md:text-[5.5rem] lg:text-[6.5rem] font-serif font-bold tracking-tight leading-[1.05] text-balance mb-8 max-w-5xl text-[var(--color-primary-text)]"
         >
-          {hero.title}
+          {formatTitle(hero.title)}
         </motion.h1>
 
         <motion.div
@@ -67,14 +79,14 @@ export default function Hero() {
               href={hero.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-4 bg-[var(--color-primary-text)] text-[var(--color-background)] font-medium rounded-full hover:bg-opacity-90 transition-colors uppercase tracking-wide text-sm"
+              className="px-8 py-4 bg-[var(--color-primary-text)] text-[var(--color-background)] font-medium rounded-full hover:bg-[var(--color-accent)] hover:text-white transition-colors uppercase tracking-wide text-sm"
             >
               Download Resume
             </a>
           )}
           <a
             href="#contact"
-            className="px-8 py-4 border-thin bg-[var(--color-surface)] text-[var(--color-primary-text)] font-medium rounded-full hover:border-[var(--color-primary-text)] transition-colors text-sm"
+            className="px-8 py-4 border-thin bg-[var(--color-surface)] text-[var(--color-primary-text)] font-medium rounded-full hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] hover:text-white transition-colors text-sm"
           >
             Get In Touch
           </a>
