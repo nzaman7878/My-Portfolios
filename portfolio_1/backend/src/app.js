@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const logger = require('./utils/logger');
 const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
@@ -37,9 +38,10 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+app.use(morgan(
+  process.env.NODE_ENV === 'development' ? 'dev' : 'combined', 
+  { stream: logger.stream }
+));
 
 // Basic health check route
 app.get('/health', (req, res) => {

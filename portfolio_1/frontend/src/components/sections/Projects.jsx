@@ -2,6 +2,7 @@ import { useProjects } from '../../hooks/useProjects';
 import { AnimatedSection } from '../common/AnimatedSection';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import { Skeleton } from '../common/Skeleton';
+import { optimizeCloudinaryUrl } from '../../utils/cloudinary';
 
 export default function Projects() {
   const { data: projects = [], isLoading: loading } = useProjects();
@@ -63,7 +64,7 @@ export default function Projects() {
                 
                 {project.image && (
                   <div className="w-full rounded-lg overflow-hidden border border-[var(--color-border-custom)] mb-4">
-                    <img src={project.image} alt={project.title} className="w-full h-auto object-cover" />
+                    <img src={optimizeCloudinaryUrl(project.image)} alt={project.title} className="w-full h-auto object-cover" />
                   </div>
                 )}
 

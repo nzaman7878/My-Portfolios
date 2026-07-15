@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import SEO from './components/common/SEO';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import ErrorFallback from './components/common/ErrorFallback';
+import { Analytics } from '@vercel/analytics/react';
 
 import NotFound from './pages/NotFound';
 
@@ -59,6 +60,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
+          <Analytics />
         </div>
       </Router>
       </ErrorBoundary>

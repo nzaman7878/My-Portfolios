@@ -3,6 +3,7 @@ import { FaArrowRight, FaGithub } from 'react-icons/fa';
 import { AnimatedSection } from '../common/AnimatedSection';
 import { useProjects } from '../../hooks/useProjects';
 import { Skeleton } from '../common/Skeleton';
+import { optimizeCloudinaryUrl } from '../../utils/cloudinary';
 
 export default function FeaturedWork() {
   const { data: projects = [], isLoading } = useProjects();
@@ -63,7 +64,7 @@ export default function FeaturedWork() {
             <div className="w-full lg:w-[60%] bg-black relative p-2 min-h-[300px]">
                <div className="w-full h-full relative overflow-hidden rounded-lg">
                   <img 
-                    src={firstProject.image || 'https://via.placeholder.com/800x600?text=No+Image'} 
+                    src={firstProject.image ? optimizeCloudinaryUrl(firstProject.image) : 'https://via.placeholder.com/800x600?text=No+Image'} 
                     alt={firstProject.title}
                     className="w-full h-full object-cover grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
                   />
@@ -111,7 +112,7 @@ export default function FeaturedWork() {
                 <div className="w-full h-64 bg-black relative p-2">
                    <div className="w-full h-full relative overflow-hidden rounded-lg">
                       <img 
-                        src={project.image || 'https://via.placeholder.com/800x600?text=No+Image'} 
+                        src={project.image ? optimizeCloudinaryUrl(project.image) : 'https://via.placeholder.com/800x600?text=No+Image'} 
                         alt={project.title} 
                         className="w-full h-full object-cover grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
                       />
