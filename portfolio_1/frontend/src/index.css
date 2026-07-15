@@ -1,16 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Light Mode Palette */
+  --bg-color: #F4F2EE;
+  --surface-color: #EAE8E4;
+  --card-color: #DFDDDA;
+  --primary-text: #111315;
+  --secondary-text: #4C4E4F;
+  --border-custom: #BDBBB8;
+  --accent-color: #38604B; 
+  --accent-secondary: #9A7B42;
+  --success-color: #38604B;
+}
+
+:root.dark {
+  /* Dark Mode Palette */
+  --bg-color: #111315;
+  --surface-color: #1A1E20;
+  --card-color: #242A2E;
+  --primary-text: #F4F2EE;
+  --secondary-text: #B5B7B8;
+  --border-custom: #343A3F;
+  --accent-color: #5B7F6A;
+  --accent-secondary: #C7A86D;
+  --success-color: #5B7F6A;
+}
+
 @theme {
-  --color-background: #111315;
-  --color-surface: #1A1E20;
-  --color-card: #242A2E;
-  --color-primary-text: #F4F2EE;
-  --color-secondary-text: #B5B7B8;
-  --color-border-custom: #343A3F;
-  --color-accent: #5B7F6A;
-  --color-accent-secondary: #C7A86D;
-  --color-success: #5B7F6A;
+  --color-background: var(--bg-color);
+  --color-surface: var(--surface-color);
+  --color-card: var(--card-color);
+  --color-primary-text: var(--primary-text);
+  --color-secondary-text: var(--secondary-text);
+  --color-border-custom: var(--border-custom);
+  --color-accent: var(--accent-color);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-success: var(--success-color);
 
   --font-sans: "Inter", system-ui, sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
@@ -32,6 +60,9 @@
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
     min-height: 100vh;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
   }
 
   ::selection {

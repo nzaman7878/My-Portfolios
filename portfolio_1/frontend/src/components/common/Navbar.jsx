@@ -1,3 +1,5 @@
+import ThemeToggle from './ThemeToggle';
+
 export default function Navbar() {
   return (
     <nav className="w-full max-w-[1200px] mx-auto px-6 md:px-12 py-8 flex items-center justify-between">
@@ -11,10 +13,11 @@ export default function Navbar() {
         <a href="#skills" className="hover:text-[var(--color-accent)] transition-colors">Capabilities</a>
       </div>
 
-      <div>
+      <div className="flex items-center">
         <a href="#contact" className="px-5 py-2.5 border-thin rounded hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] transition-all text-sm font-medium">
           Let's Talk
         </a>
+        <ThemeToggle />
       </div>
     </nav>
   );
