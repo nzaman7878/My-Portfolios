@@ -1,0 +1,6 @@
+{
+  "name": "Developer Portfolio",
+  "description": "Full-stack portfolio website for a MERN Stack + Generative AI Developer with admin dashboard and AI Assistant",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

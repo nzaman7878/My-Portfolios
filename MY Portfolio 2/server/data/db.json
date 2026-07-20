@@ -1,0 +1,257 @@
+{
+  "projects": [
+    {
+      "id": "p1",
+      "name": "AI-Powered Chatbot Builder",
+      "description": "A comprehensive no-code platform enabling businesses to design, prototype, and deploy custom Generative AI agents. Features document ingestion via retrieval-augmented generation (RAG), vector database search, and conversational memory configurations.",
+      "technologies": [
+        "React.js",
+        "Node.js",
+        "Express.js",
+        "MongoDB",
+        "Google Gemini API",
+        "LangChain",
+        "Tailwind CSS"
+      ],
+      "githubLink": "https://github.com/developer/ai-chatbot-platform",
+      "liveLink": "https://ai-chatbot-platform.demo",
+      "category": "Generative AI",
+      "image": "https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?auto=format&fit=crop&w=800&q=80",
+      "features": [
+        "Dynamic Document Ingestion (PDF, TXT, DOCX) with automated chunking",
+        "Vector Embeddings Generation & querying with high semantic match",
+        "Configurable system instructions and temperature selectors per agent",
+        "Real-time streaming conversation rendering with streaming UI cards",
+        "Exportable chatbot widget script for direct website installation"
+      ],
+      "views": 128
+    },
+    {
+      "id": "p2",
+      "name": "MERN SaaS E-commerce Application",
+      "description": "A premium, fully featured single-page e-commerce solution offering secure checkout, dynamic stock monitoring, complex product filtering pipelines, and an intensive administrator operations dashboard.",
+      "technologies": [
+        "React.js",
+        "Redux",
+        "Node.js",
+        "Express.js",
+        "MongoDB",
+        "Tailwind CSS",
+        "JWT Authentication"
+      ],
+      "githubLink": "https://github.com/developer/mern-ecommerce",
+      "liveLink": "https://mern-ecommerce-demo.demo",
+      "category": "MERN Stack",
+      "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+      "features": [
+        "Secure payment simulation gateway with dynamic discount codes",
+        "Intuitive admin interface for product inventory, category controls, and order dispatch tracking",
+        "Complex client-side product searching, tag-filtering, and dynamic pagination",
+        "Interactive customer cart management, wishlist persistence, and purchase notifications",
+        "Rich charts displaying sales metrics and product category breakdown logs"
+      ],
+      "views": 95
+    },
+    {
+      "id": "p3",
+      "name": "AI Resume Optimization Engine",
+      "description": "An interactive smart system that processes PDF resumes, evaluates them against specific job listings, provides metric-driven matching reports, and generates customized revision suggestions.",
+      "technologies": [
+        "React.js",
+        "TypeScript",
+        "Node.js",
+        "Express.js",
+        "Google Gemini API",
+        "Tailwind CSS"
+      ],
+      "githubLink": "https://github.com/developer/ai-resume-analyzer",
+      "liveLink": "https://ai-resume-analyzer-demo.demo",
+      "category": "Generative AI",
+      "image": "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80",
+      "features": [
+        "Robust client-side PDF document parser and text extractor",
+        "Automated semantic core-skills profiling against job role descriptions",
+        "Intelligent ATS scoring (Applicant Tracking System compatibility check)",
+        "Prompt engineering architecture for highly tailored structure and action-verb improvements",
+        "Downloadable side-by-side comparison analytics and tailored cover letters"
+      ],
+      "views": 142
+    },
+    {
+      "id": "p4",
+      "name": "Dynamic AI Interview Prep Coach",
+      "description": "A highly specialized conversational training platform that simulates technical job interviews, evaluates user answers with contextual AI feedback, and records overall scoring progress.",
+      "technologies": [
+        "React.js",
+        "Tailwind CSS",
+        "Node.js",
+        "Express.js",
+        "Google Gemini API",
+        "JWT Authentication"
+      ],
+      "githubLink": "https://github.com/developer/ai-interview-prep",
+      "liveLink": "https://ai-interview-prep.demo",
+      "category": "Full Stack",
+      "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+      "features": [
+        "Real-time dynamic voice or text-based continuous conversation scenarios",
+        "Highly adaptive difficulty pacing based on prompt candidate feedback",
+        "Instant conceptual grading, missing skill notifications, and model answers",
+        "Dashboard metrics tracing confidence growth, pace, and knowledge completeness",
+        "Preconfigured interview sets representing top Tier-1 tech company roles"
+      ],
+      "views": 110
+    }
+  ],
+  "education": [
+    {
+      "id": "edu1",
+      "degree": "MSc Information Technology",
+      "institution": "Gauhati University",
+      "duration": "2024 - 2026",
+      "cgpa": "9.2 / 10",
+      "description": "Majored in Advanced Computing systems. Spearheaded multiple projects focusing on full-stack web automation, natural language processing models, and serverless architectures."
+    },
+    {
+      "id": "edu2",
+      "degree": "BSc Computer Science",
+      "institution": "Cotton University",
+      "duration": "2021 - 2024",
+      "cgpa": "8.8 / 10",
+      "description": "Built strong foundations in data structures, algorithms, object-oriented concepts, relational database normalization, and operating system mechanisms."
+    },
+    {
+      "id": "edu3",
+      "degree": "Higher Secondary Education (Science)",
+      "institution": "Cotton College",
+      "duration": "2019 - 2021",
+      "cgpa": "91%",
+      "description": "Focused on core sciences: Mathematics, Physics, Chemistry, and Computer Science."
+    },
+    {
+      "id": "edu4",
+      "degree": "Secondary School Certificate",
+      "institution": "Holy Child High School",
+      "duration": "2009 - 2019",
+      "cgpa": "94%",
+      "description": "Graduated with absolute distinction in general sciences and creative writing courses."
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp1",
+      "company": "Vectora AI Systems (Remote)",
+      "role": "Lead Generative AI & Full-Stack Developer",
+      "duration": "Jul 2024 - Present",
+      "description": "Designed and deployed custom automated agents utilizing client-side RAG pipelines with the modern @google/genai Node SDK. Optimized context mapping algorithms that reduced token usage on extensive chat loads. Constructed microservices executing asynchronous web socket channels and state-driven conversation components.",
+      "technologies": [
+        "Google Gemini SDK",
+        "LangChain",
+        "MongoDB",
+        "Express.js",
+        "React.js",
+        "Node.js",
+        "Vector DBs",
+        "TypeScript"
+      ]
+    },
+    {
+      "id": "exp2",
+      "company": "Symbiotic Web Solutions (Guwahati, Assam)",
+      "role": "MERN Stack Engineer",
+      "duration": "Jan 2022 - Mar 2024",
+      "description": "Coordinated development of key dynamic features on several enterprise-grade SaaS models. Engineered complex data schema validation filters, password encryption middleware, and dynamic multi-user session management workflows. Boosted layout rendering speeds by transitioning heavy sections to pure CSS utility classes and modularized state systems.",
+      "technologies": [
+        "MongoDB",
+        "Express.js",
+        "React.js",
+        "Node.js",
+        "Tailwind CSS",
+        "Redux Toolkit",
+        "JWT",
+        "REST APIs"
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "id": "m1",
+      "name": "Sarah Jenkins",
+      "email": "sarah.j@innovate-tech.com",
+      "subject": "Collaboration Opportunity - AI Chat Widget Integration",
+      "message": "Hi there! I came across your portfolio and I am extremely impressed by your Generative AI integrations, especially the Chatbot Platform. We have a client looking to build a tailored RAG chatbot on their website and we'd love to contract you for this project. Let me know when you are open for a brief introductory call!",
+      "createdAt": "2026-07-18T12:23:49.665Z",
+      "read": false
+    }
+  ],
+  "skills": [
+    {
+      "id": "sk1",
+      "name": "Frontend",
+      "skills": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "TypeScript",
+        "React.js",
+        "Next.js",
+        "Tailwind CSS",
+        "Redux"
+      ]
+    },
+    {
+      "id": "sk2",
+      "name": "Backend",
+      "skills": [
+        "Node.js",
+        "Express.js",
+        "REST APIs",
+        "JWT Authentication"
+      ]
+    },
+    {
+      "id": "sk3",
+      "name": "Database",
+      "skills": [
+        "MongoDB",
+        "Mongoose"
+      ]
+    },
+    {
+      "id": "sk4",
+      "name": "AI & Gen AI",
+      "skills": [
+        "OpenAI API",
+        "Google Gemini API",
+        "LangChain",
+        "RAG",
+        "Vector Databases",
+        "Prompt Engineering",
+        "AI Chatbots"
+      ]
+    },
+    {
+      "id": "sk5",
+      "name": "Tools",
+      "skills": [
+        "Git",
+        "GitHub",
+        "Postman",
+        "Docker",
+        "Vercel",
+        "Render",
+        "VS Code"
+      ]
+    }
+  ],
+  "stats": {
+    "visitors": 568,
+    "projectClicks": 147,
+    "messagesReceived": 1,
+    "likes": 85
+  },
+  "adminConfig": {
+    "username": "admin",
+    "passwordHash": "$2a$10$p0b33rV6xQxT2e08p0gKRe7p.EInuL0S/Ewz2v6MclZpDOn1lPzR."
+  }
+}
