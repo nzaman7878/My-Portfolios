@@ -15,7 +15,7 @@ export const loginController = asyncHandler(async (req: Request, res: Response) 
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 60 * 60 * 1000 // 1 hour
   });
 
   return res.json({ username: result.username });

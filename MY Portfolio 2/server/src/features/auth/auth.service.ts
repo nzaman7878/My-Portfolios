@@ -15,6 +15,6 @@ export const login = async (username, password) => {
     throw new ApiError(401, 'Invalid credentials.');
   }
 
-  const token = jwt.sign({ username }, env.JWT_SECRET, { expiresIn: '24h' });
+  const token = jwt.sign({ username }, env.JWT_SECRET, { expiresIn: '1h' });
   return { token, username };
 };
