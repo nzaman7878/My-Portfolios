@@ -156,10 +156,7 @@ export default function App() {
         {/* View Router switches */}
         {currentView === 'portfolio' ? (
           <div className="relative">
-            {/* Elegant Subdued Ambiences */}
-            <div className="absolute top-20 left-[-100px] w-96 h-96 bg-indigo-500/[0.02] dark:bg-indigo-600/[0.03] rounded-full blur-[130px] pointer-events-none z-0" />
-            <div className="absolute top-[30%] right-[-100px] w-96 h-96 bg-cyan-500/[0.015] dark:bg-cyan-600/[0.02] rounded-full blur-[130px] pointer-events-none z-0" />
-            <div className="absolute bottom-[20%] left-[-100px] w-96 h-96 bg-indigo-500/[0.015] dark:bg-indigo-600/[0.02] rounded-full blur-[130px] pointer-events-none z-0" />
+            {/* Solid minimal background */}
 
             {/* 1. Hero */}
             <Hero stats={statsData} onLike={handleLikeSubmit} />

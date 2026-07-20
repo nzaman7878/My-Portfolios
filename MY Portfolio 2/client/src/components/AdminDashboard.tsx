@@ -659,7 +659,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 {/* Operations Terminal Logs */}
                 <div className="p-6 bg-neutral-900 text-neutral-200 rounded-3xl border border-neutral-800 shadow-md font-mono space-y-3">
                   <div className="flex items-center space-x-2 pb-3 border-b border-neutral-800">
-                    <Terminal size={14} className="text-cyan-400 animate-pulse" />
+                    <Terminal size={14} className="text-neutral-500" />
                     <span className="text-xs font-bold text-neutral-200">SYSTEM COGNITIVE ENVIRONMENT LOGS</span>
                   </div>
                   <div className="space-y-1.5 leading-relaxed text-[11px] text-left">
