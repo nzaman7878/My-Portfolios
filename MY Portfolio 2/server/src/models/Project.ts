@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IProject extends Document {
-  _id: string; // Map from 'id' to _id if we want, but let's just let Mongo generate _id and we can store id if needed, or better just use Mongoose default _id and alias it to id in toJSON.
   name: string;
   description: string;
   technologies: string[];
