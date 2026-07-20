@@ -459,17 +459,14 @@ export const Projects: React.FC<{
     <section id="projects" className="py-28 bg-[#FAF9F6] dark:bg-[#08080A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <SectionHeading number="04" title="Featured Projects" subtitle="PROJECT PORTFOLIO" />
+        <SectionHeading number="04" title="Selected Projects" subtitle="PROJECT PORTFOLIO" />
 
         <div className="mb-12 max-w-4xl space-y-4 text-left">
           <p className="text-xl sm:text-2xl font-light tracking-tight text-neutral-900 dark:text-slate-100">
-            Every project I build begins with a simple question: <span className="font-serif italic font-light text-indigo-500 dark:text-[#06B6D4]">How can technology make this experience better?</span>
+            I believe projects should demonstrate problem-solving rather than simply showcase technology. Each application below was built to explore real-world challenges while improving architecture, scalability, and user experience.
           </p>
           <p className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
-            My portfolio includes full-stack applications, AI-powered tools, and scalable web platforms built to solve practical problems. From Learning Management Systems and e-commerce platforms to AI applications and healthcare solutions, each project has strengthened my understanding of software architecture, user experience, and product development.
-          </p>
-          <p className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
-            Rather than building projects solely to learn a framework, I focus on creating applications that reflect real-world requirements, clean engineering practices, and thoughtful design. Each project represents a step forward in my journey as a developer and my commitment to building software that is reliable, maintainable, and enjoyable to use.
+            Every project reflects my focus on clean code, scalable architecture, responsive design, and delivering meaningful user experiences.
           </p>
         </div>
 
