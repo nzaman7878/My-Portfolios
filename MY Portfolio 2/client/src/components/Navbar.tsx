@@ -25,11 +25,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
   const navLinks = [
     { label: 'Home', id: 'hero' },
     { label: 'About', id: 'about' },
-    { label: 'Education', id: 'education' },
-    { label: 'Skills', id: 'skills' },
     { label: 'Projects', id: 'projects' },
     { label: 'Experience', id: 'experience' },
-    { label: 'Certifications', id: 'certifications' },
     { label: 'Contact', id: 'contact' },
   ];
 
@@ -71,7 +68,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
           {/* Desktop Nav Actions */}
           <div className="hidden lg:flex items-center space-x-7">
             {currentView === 'portfolio' && (
-              <div className="flex items-center space-x-5">
+              <div className="flex items-center space-x-7">
                 {navLinks.map((link) => (
                   <button
                     key={link.id}

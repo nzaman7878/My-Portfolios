@@ -142,18 +142,18 @@ Technical Focus:
 
           <div className="space-y-4">
             <p className="text-xs sm:text-sm font-mono tracking-wider text-neutral-400 dark:text-neutral-500">
-              NURUZZAMAN — SYSTEMS ARCHITECT
+              NURUZZAMAN — FULL-STACK AI ENGINEER
             </p>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extralight tracking-tight text-neutral-950 dark:text-white leading-[1.05]">
-              Designing and building <span className="font-serif italic font-light text-indigo-500 dark:text-[#06B6D4]">modern web applications</span> with MERN and AI.
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extralight tracking-tight text-neutral-800 dark:text-white leading-tight">
+              Designing and building <span className="font-serif italic font-light text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 dark:from-[#06B6D4] dark:to-indigo-400">modern web applications</span> with MERN and AI.
             </h1>
           </div>
 
           <div className="text-sm text-neutral-500 dark:text-neutral-400 min-h-[2.5rem] flex items-center">
-            Hi, I'm Nuruzzaman, a Full-Stack Developer based in Assam, India.
+            Hi, I'm Nuruzzaman, a Full-Stack AI Engineer based in Assam, India.
           </div>
 
-          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xl">
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-lg">
             I build scalable web applications with the MERN stack and continuously explore Generative AI to create smarter, more capable software. I enjoy solving complex problems, designing intuitive user experiences, and turning ideas into reliable products that people love to use.
           </p>
 
