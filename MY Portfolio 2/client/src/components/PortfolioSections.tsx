@@ -125,17 +125,15 @@ Technical Focus:
       <div className="absolute inset-y-0 left-1/4 w-[1px] bg-neutral-200/20 dark:bg-white/[0.02] pointer-events-none" />
       <div className="absolute inset-y-0 right-1/4 w-[1px] bg-neutral-200/20 dark:bg-white/[0.02] pointer-events-none" />
 
-      {/* Exquisite Low-Intensity Lighting */}
-      <div className="absolute top-[10%] left-[-10%] w-[40rem] h-[40rem] rounded-full bg-indigo-500/[0.03] dark:bg-[#6366F1]/[0.02] blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[-10%] w-[35rem] h-[35rem] rounded-full bg-cyan-500/[0.02] dark:bg-[#06B6D4]/[0.015] blur-[140px] pointer-events-none" />
+      {/* Solid Refined Background */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         
         {/* Left Column: Core Editorial Presentation */}
         <div className="lg:col-span-7 space-y-8 text-left">
-          <div className="inline-flex items-center space-x-3.5 px-3 py-1 bg-white/60 dark:bg-white/[0.02] border border-neutral-200/60 dark:border-white/5 rounded-full backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#06B6D4] animate-ping" />
-            <span className="text-[10px] font-mono tracking-widest text-neutral-500 dark:text-neutral-400 uppercase">
+          <div className="inline-flex items-center space-x-3.5 px-3 py-1 bg-white dark:bg-[#121215] border border-neutral-200 dark:border-neutral-800 rounded-full shadow-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-neutral-800 dark:bg-white" />
+            <span className="text-[10px] font-mono tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
               Operational Index / Open for Collaboration
             </span>
           </div>
@@ -145,7 +143,7 @@ Technical Focus:
               NURUZZAMAN — FULL-STACK AI ENGINEER
             </p>
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-extralight tracking-tight text-neutral-800 dark:text-white leading-tight">
-              Designing and building <span className="font-serif italic font-light text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 dark:from-[#06B6D4] dark:to-indigo-400">modern web applications</span> with MERN and AI.
+              Designing and building <span className="font-serif italic font-light text-neutral-950 dark:text-neutral-300">modern web applications</span> with MERN and AI.
             </h1>
           </div>
 
@@ -545,7 +543,7 @@ export const Projects: React.FC<{
                     className="w-full h-full object-cover grayscale contrast-110 saturate-50 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute top-4 right-4 px-2.5 py-1 bg-white/90 dark:bg-[#121215]/90 backdrop-blur-md rounded-lg text-[9px] font-mono uppercase tracking-widest text-indigo-600 dark:text-[#06B6D4] border border-neutral-200/50 dark:border-white/5">
+                  <div className="absolute top-4 right-4 px-2.5 py-1 bg-white dark:bg-[#121215] rounded-lg text-[9px] font-mono uppercase tracking-widest text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-800 shadow-sm">
                     {proj.category}
                   </div>
                 </div>
@@ -609,7 +607,7 @@ export const Projects: React.FC<{
         {/* High-fidelity Details Modal Panel overlay */}
         <AnimatePresence>
           {selectedProject && (
-            <div className="fixed inset-0 z-50 overflow-y-auto bg-[#070709]/80 backdrop-blur-md flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-50 overflow-y-auto bg-neutral-900/95 flex items-center justify-center p-4">
               <motion.div 
                 initial={{ scale: 0.97, y: 15, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -627,7 +625,7 @@ export const Projects: React.FC<{
                   <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#121215] via-transparent to-transparent pointer-events-none" />
                   <button 
                     onClick={() => setSelectedProject(null)}
-                    className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/90 dark:bg-white/5 backdrop-blur-sm shadow flex items-center justify-center text-xs text-neutral-700 dark:text-neutral-300 hover:scale-105 transition border dark:border-white/10"
+                    className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white dark:bg-[#202025] shadow-sm flex items-center justify-center text-xs text-neutral-700 dark:text-neutral-300 hover:scale-105 transition border border-neutral-200 dark:border-neutral-800"
                   >
                     ✕
                   </button>

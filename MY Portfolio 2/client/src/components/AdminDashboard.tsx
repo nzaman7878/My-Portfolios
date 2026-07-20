@@ -422,11 +422,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // ==========================================
   if (!isAdminLoggedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-neutral-50 dark:bg-neutral-950">
-        <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-indigo-500/5 blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/5 blur-3xl" />
-
-        <div className="max-w-md w-full space-y-6 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-8 rounded-3xl shadow-xl z-10 text-left">
+      <div className="min-h-screen flex items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-neutral-50 dark:bg-[#070709]">
+        <div className="max-w-md w-full space-y-6 bg-white dark:bg-[#121215] border border-neutral-200 dark:border-neutral-800 p-8 rounded-3xl shadow-xl text-left">
           <div className="text-center">
             <div className="h-12 w-12 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold mx-auto shadow-md">
               <ShieldCheck size={24} />

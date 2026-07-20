@@ -89,19 +89,19 @@ export const AiAssistant: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="mb-4 w-[22rem] sm:w-[26rem] h-[34rem] rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white/90 dark:bg-neutral-900/95 backdrop-blur-md shadow-2xl flex flex-col overflow-hidden"
+            className="mb-4 w-[22rem] sm:w-[26rem] h-[34rem] rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#121215] shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="p-4 bg-gradient-to-r from-indigo-600 to-indigo-800 text-white flex items-center justify-between shadow-md">
+            <div className="p-4 bg-neutral-900 dark:bg-[#070709] border-b border-neutral-800 text-white flex items-center justify-between shadow-sm">
               <div className="flex items-center space-x-3">
-                <div className="p-2 bg-white/10 rounded-lg">
-                  <Sparkles size={18} className="text-cyan-300 animate-pulse" />
+                <div className="p-2 bg-white/5 border border-neutral-700/50 rounded-lg">
+                  <Sparkles size={18} className="text-neutral-400" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm tracking-wide">Developer Companion</h3>
                   <div className="flex items-center space-x-1.5 mt-0.5">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span className="text-[10px] text-indigo-200 font-medium tracking-wider">LIVE COMPANION</span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    <span className="text-[10px] text-neutral-400 font-medium tracking-wider">LIVE COMPANION</span>
                   </div>
                 </div>
               </div>
@@ -203,12 +203,11 @@ export const AiAssistant: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-14 h-14 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 text-white shadow-lg flex items-center justify-center cursor-pointer border border-indigo-400/20 relative"
+        className="w-14 h-14 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 shadow-lg flex items-center justify-center cursor-pointer border border-neutral-800 dark:border-neutral-200 relative"
       >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
         {!isOpen && (
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-4 w-4 bg-indigo-500 text-[9px] font-bold text-white items-center justify-center">AI</span>
           </span>
         )}

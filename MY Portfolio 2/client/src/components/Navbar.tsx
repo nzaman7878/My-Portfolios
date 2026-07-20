@@ -46,7 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
   return (
     <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
       isScrolled 
-        ? 'bg-white/85 dark:bg-[#08080A]/80 backdrop-blur-xl border-b border-neutral-200/50 dark:border-white/10 shadow-sm py-3' 
+        ? 'bg-white/98 dark:bg-[#070709]/98 shadow-sm py-3 border-b border-neutral-200/50 dark:border-white/5' 
         : 'bg-transparent py-5'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,11 +57,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
             onClick={() => handleScrollToSection('hero')} 
             className="flex items-center space-x-2 cursor-pointer group"
           >
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#6366F1] to-[#06B6D4] flex items-center justify-center text-white font-bold transition group-hover:scale-105 shadow-lg shadow-indigo-500/20">
+            <div className="h-8 w-8 rounded-lg bg-neutral-900 dark:bg-white flex items-center justify-center text-white dark:text-neutral-950 font-bold transition group-hover:scale-105 shadow-sm border border-neutral-800 dark:border-neutral-200">
               N
             </div>
             <span className="font-semibold text-neutral-850 dark:text-slate-100 text-sm tracking-tight">
-              Nuruzzaman <span className="text-indigo-500 dark:text-[#06B6D4] font-semibold text-xs pl-1">/ Full-Stack AI</span>
+              Nuruzzaman <span className="text-neutral-500 dark:text-neutral-400 font-semibold text-xs pl-1">/ Full-Stack AI</span>
             </span>
           </div>
 
@@ -143,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white/95 dark:bg-[#08080A]/95 backdrop-blur-xl border-b border-neutral-200 dark:border-white/10 py-4 px-4 transition-all animate-fadeIn">
+        <div className="lg:hidden bg-white dark:bg-[#070709] border-b border-neutral-200 dark:border-white/5 py-4 px-4 transition-all animate-fadeIn shadow-2xl">
           {currentView === 'portfolio' && (
             <div className="flex flex-col space-y-3 pb-4">
               {navLinks.map((link) => (
