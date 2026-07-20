@@ -56,24 +56,19 @@ export default function App() {
   useEffect(() => {
     refreshAllResources();
 
-    // Check for active token
-    const token = localStorage.getItem('admin_token');
-    if (token) {
-      fetch('/api/auth/verify', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }).then(res => {
-        if (res.ok) {
-          setAdminToken(token);
-          setIsAdminLoggedIn(true);
-        } else {
-          localStorage.removeItem('admin_token');
-        }
-      }).catch(() => {
-        localStorage.removeItem('admin_token');
-      });
-    }
+    // Check for active token via cookie automatically
+    fetch('/api/auth/verify', {
+      // credentials: 'same-origin' is handled by proxy/default, but we can be explicit
+      // if using Vite proxy it just works
+    }).then(res => {
+      if (res.ok) {
+        setIsAdminLoggedIn(true);
+      } else {
+        setIsAdminLoggedIn(false);
+      }
+    }).catch(() => {
+      setIsAdminLoggedIn(false);
+    });
 
     // Scroll top monitor
     const monitorScroll = () => {
@@ -84,16 +79,17 @@ export default function App() {
   }, []);
 
   // Handle Admin Auth Success
-  const handleAdminSuccess = (token: string, username: string) => {
-    localStorage.setItem('admin_token', token);
-    setAdminToken(token);
+  const handleAdminSuccess = (username: string) => {
     setIsAdminLoggedIn(true);
   };
 
   // Handle Logout Trigger
-  const handleLogoutAdmin = () => {
-    localStorage.removeItem('admin_token');
-    setAdminToken(null);
+  const handleLogoutAdmin = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (e) {
+      console.error(e);
+    }
     setIsAdminLoggedIn(false);
     setCurrentView('portfolio');
   };
@@ -198,7 +194,7 @@ export default function App() {
           </div>
         ) : (
           <AdminDashboard 
-            token={adminToken}
+            isAdminLoggedIn={isAdminLoggedIn}
             onLoginSuccess={handleAdminSuccess}
             onLogout={handleLogoutAdmin}
             projects={projectsList}

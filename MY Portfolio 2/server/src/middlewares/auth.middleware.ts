@@ -9,12 +9,12 @@ export interface AuthenticatedRequest extends Request {
 
 export const authenticateAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new ApiError(401, 'Access denied. Mock token missing or invalid format.');
+    const token = req.cookies?.admin_token;
+    
+    if (!token) {
+      throw new ApiError(401, 'Access denied. Authentication cookie missing.');
     }
 
-    const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, env.JWT_SECRET) as { username: string };
     req.user = decoded;
     next();

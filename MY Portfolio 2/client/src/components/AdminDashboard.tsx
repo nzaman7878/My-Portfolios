@@ -7,8 +7,8 @@ import {
 import { Project, Education, Experience, ContactMessage, SkillCategory, PortfolioStats } from '../types.js';
 
 interface AdminDashboardProps {
-  token: string | null;
-  onLoginSuccess: (token: string, username: string) => void;
+  isAdminLoggedIn: boolean;
+  onLoginSuccess: (username: string) => void;
   onLogout: () => void;
   projects: Project[];
   education: Education[];
@@ -19,7 +19,7 @@ interface AdminDashboardProps {
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
-  token,
+  isAdminLoggedIn,
   onLoginSuccess,
   onLogout,
   projects,
@@ -82,13 +82,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // Fetch administrator messages if token exists
   const fetchMessages = async () => {
-    if (!token) return;
+    if (!isAdminLoggedIn) return;
     setLoadingMsgList(true);
     try {
       const res = await fetch('/api/contact', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        
       });
       if (res.ok) {
         const data = await res.json();
@@ -102,10 +100,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   useEffect(() => {
-    if (token) {
+    if (isAdminLoggedIn) {
       fetchMessages();
     }
-  }, [token]);
+  }, [isAdminLoggedIn]);
 
   // Handle Sign In Submission
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -125,7 +123,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       });
       const data = await res.json();
       if (res.ok) {
-        onLoginSuccess(data.token, data.username);
+        onLoginSuccess(data.username);
         setSuccessNotif('Session started successfully.');
         setUsernameInput('');
         setPasswordInput('');
@@ -199,9 +197,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         res = await fetch(`/api/projects/${editingProject.id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+            'Content-Type': 'application/json'},
           body: JSON.stringify(payload)
         });
       } else {
@@ -209,9 +205,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         res = await fetch('/api/projects', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+            'Content-Type': 'application/json'},
           body: JSON.stringify(payload)
         });
       }
@@ -234,11 +228,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!window.confirm("Verify: Are you absolutely sure you want to permanently delete this project record?")) return;
     try {
       const res = await fetch(`/api/projects/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+        method: 'DELETE'});
       if (res.ok) {
         triggerNotification('Project record deleted.', '');
       } else {
@@ -265,18 +255,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         res = await fetch(`/api/education/${editingEducation.id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+            'Content-Type': 'application/json'},
           body: JSON.stringify(eduForm)
         });
       } else {
         res = await fetch('/api/education', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+            'Content-Type': 'application/json'},
           body: JSON.stringify(eduForm)
         });
       }
@@ -297,9 +283,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!window.confirm("Verify: Delete this educational history?")) return;
     try {
       const res = await fetch(`/api/education/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+        method: 'DELETE'});
       if (res.ok) triggerNotification('Educational history file destroyed.', '');
     } catch (err) {
       console.error(err);
@@ -327,18 +311,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         res = await fetch(`/api/experience/${editingExperience.id}`, {
           method: 'PUT',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+            'Content-Type': 'application/json'},
           body: JSON.stringify(payload)
         });
       } else {
         res = await fetch('/api/experience', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+            'Content-Type': 'application/json'},
           body: JSON.stringify(payload)
         });
       }
@@ -359,9 +339,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!window.confirm("Verify: Delete career experience listing?")) return;
     try {
       const res = await fetch(`/api/experience/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+        method: 'DELETE'});
       if (res.ok) triggerNotification('Experience listing deleted.', '');
     } catch (err) {
       console.error(err);
@@ -376,9 +354,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       const res = await fetch(`/api/skills/${catId}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+          'Content-Type': 'application/json'},
         body: JSON.stringify({ skills: skillsArray })
       });
       if (res.ok) {
@@ -415,9 +391,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       const res = await fetch(`/api/contact/${id}/read`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+          'Content-Type': 'application/json'},
         body: JSON.stringify({ read: !currentStatus })
       });
       if (res.ok) {
@@ -433,9 +407,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!window.confirm("Permanently erase this client contact message?")) return;
     try {
       const res = await fetch(`/api/contact/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+        method: 'DELETE'});
       if (res.ok) {
         fetchMessages();
         triggerNotification('Inbox message deleted.', '');
@@ -448,7 +420,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // ==========================================
   // UNRESTRICTED: LOGIN card if token is null
   // ==========================================
-  if (!token) {
+  if (!isAdminLoggedIn) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-neutral-50 dark:bg-neutral-950">
         <div className="absolute top-1/4 left-1/4 w-48 h-48 bg-indigo-500/5 blur-3xl animate-pulse" />
