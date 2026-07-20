@@ -1,18 +1,15 @@
 import * as repository from './experience.repository.js';
 import { ApiError } from '../../core/ApiError.js';
 
-const generateId = () => Math.random().toString(36).substring(2, 11);
+export const getExperience = async () => await repository.getAllExperience();
 
-export const getExperience = () => repository.getAllExperience();
-
-export const createExperience = (data) => {
+export const createExperience = async (data) => {
   const { company, role, duration, description, technologies } = data;
   if (!company || !role || !duration) {
     throw new ApiError(400, 'Missing required experience attributes.');
   }
 
   const newExp = {
-    id: generateId(),
     company,
     role,
     duration,
@@ -20,14 +17,13 @@ export const createExperience = (data) => {
     technologies: Array.isArray(technologies) ? technologies : []
   };
 
-  repository.saveExperience(newExp);
-  return newExp;
+  return await repository.saveExperience(newExp);
 };
 
-export const updateExperience = (id: string, data) => {
+export const updateExperience = async (id: string, data) => {
   const { company, role, duration, description, technologies } = data;
   
-  const current = repository.getExperienceById(id);
+  const current = await repository.getExperienceById(id);
   if (!current) throw new ApiError(404, 'Experience record not found.');
 
   const updatedData = {
@@ -35,14 +31,15 @@ export const updateExperience = (id: string, data) => {
     role: role || current.role,
     duration: duration || current.duration,
     description: description !== undefined ? description : current.description,
-    technologies: Array.isArray(technologies) ? technologies : current.technologies
+    technologies: technologies ? (Array.isArray(technologies) ? technologies : [technologies]) : current.technologies
   };
 
-  return repository.updateExperience(id, updatedData);
+  return await repository.updateExperience(id, updatedData);
 };
 
-export const deleteExperience = (id: string) => {
-  if (!repository.deleteExperience(id)) {
+export const deleteExperience = async (id: string) => {
+  const deleted = await repository.deleteExperience(id);
+  if (!deleted) {
     throw new ApiError(404, 'Experience record not found.');
   }
 };

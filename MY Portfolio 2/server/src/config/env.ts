@@ -10,4 +10,5 @@ export const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   JWT_SECRET: process.env.ADMIN_JWT_SECRET || 'mern_genai_secret_key_123',
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
+  MONGO_URI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/portfolio',
 };

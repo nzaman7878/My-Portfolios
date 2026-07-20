@@ -1,11 +1,9 @@
 import * as repository from './messages.repository.js';
 import { ApiError } from '../../core/ApiError.js';
 
-const generateId = () => Math.random().toString(36).substring(2, 11);
+export const getMessages = async () => await repository.getAllMessages();
 
-export const getMessages = () => repository.getAllMessages();
-
-export const createMessage = (data) => {
+export const createMessage = async (data) => {
   const { name, email, subject, message } = data;
   
   if (!name || !email || !subject || !message) {
@@ -13,7 +11,6 @@ export const createMessage = (data) => {
   }
 
   const newMsg = {
-    id: generateId(),
     name,
     email,
     subject,
@@ -22,19 +19,19 @@ export const createMessage = (data) => {
     read: false
   };
 
-  repository.saveMessage(newMsg);
-  return newMsg;
+  return await repository.saveMessage(newMsg);
 };
 
-export const markAsRead = (id: string, readStatus) => {
+export const markAsRead = async (id: string, readStatus) => {
   const isRead = typeof readStatus === 'boolean' ? readStatus : true;
-  const message = repository.updateMessageReadStatus(id, isRead);
+  const message = await repository.updateMessageReadStatus(id, isRead);
   if (!message) throw new ApiError(404, 'Message not found.');
   return message;
 };
 
-export const deleteMessage = (id: string) => {
-  if (!repository.deleteMessage(id)) {
+export const deleteMessage = async (id: string) => {
+  const deleted = await repository.deleteMessage(id);
+  if (!deleted) {
     throw new ApiError(404, 'Message not found.');
   }
 };

@@ -1,30 +1,26 @@
-import { getDb, saveDb } from '../../db/dbHelper.js';
+import Message from '../../models/Message.js';
+import Stats from '../../models/Stats.js';
 
-export const getAllMessages = () => getDb().messages;
-export const getMessageById = (id: string) => getDb().messages.find(m => m.id === id);
-export const saveMessage = (msg) => {
-  const db = getDb();
-  db.messages.push(msg);
-  db.stats.messagesReceived += 1;
-  saveDb(db);
+export const getAllMessages = async () => {
+  return await Message.find({});
 };
-export const updateMessageReadStatus = (id: string, read: boolean) => {
-  const db = getDb();
-  const message = db.messages.find(m => m.id === id);
-  if (message) {
-    message.read = read;
-    saveDb(db);
-    return message;
-  }
-  return null;
+
+export const getMessageById = async (id: string) => {
+  return await Message.findById(id);
 };
-export const deleteMessage = (id: string) => {
-  const db = getDb();
-  const initialLength = db.messages.length;
-  db.messages = db.messages.filter(m => m.id !== id);
-  if (db.messages.length !== initialLength) {
-    saveDb(db);
-    return true;
-  }
-  return false;
+
+export const saveMessage = async (msgData) => {
+  const msg = new Message(msgData);
+  await msg.save();
+  await Stats.findOneAndUpdate({}, { $inc: { messagesReceived: 1 } }, { upsert: true });
+  return msg;
+};
+
+export const updateMessageReadStatus = async (id: string, read: boolean) => {
+  return await Message.findByIdAndUpdate(id, { read }, { new: true });
+};
+
+export const deleteMessage = async (id: string) => {
+  const result = await Message.findByIdAndDelete(id);
+  return result !== null;
 };

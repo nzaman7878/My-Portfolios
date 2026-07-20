@@ -1,16 +1,16 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { getDb } from '../../db/dbHelper.js';
+import Admin from '../../models/Admin.js';
 import { env } from '../../config/env.js';
 import { ApiError } from '../../core/ApiError.js';
 
 export const login = async (username, password) => {
-  const db = getDb();
-  if (username !== db.adminConfig.username) {
+  const admin = await Admin.findOne({ username });
+  if (!admin) {
     throw new ApiError(401, 'Invalid credentials.');
   }
 
-  const isMatched = await bcrypt.compare(password, db.adminConfig.passwordHash);
+  const isMatched = await bcrypt.compare(password, admin.passwordHash);
   if (!isMatched) {
     throw new ApiError(401, 'Invalid credentials.');
   }

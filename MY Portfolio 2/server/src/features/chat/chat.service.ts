@@ -1,7 +1,10 @@
 import { GoogleGenAI } from '@google/genai';
 import { env } from '../../config/env.js';
-import { getDb } from '../../db/dbHelper.js';
 import { ApiError } from '../../core/ApiError.js';
+import Project from '../../models/Project.js';
+import Education from '../../models/Education.js';
+import Experience from '../../models/Experience.js';
+import Skill from '../../models/Skill.js';
 
 let ai: GoogleGenAI | null = null;
 if (env.GEMINI_API_KEY) {
@@ -27,21 +30,26 @@ export const generateChatResponse = async (message: string, history: any[]) => {
     throw new ApiError(400, 'Message content is required.');
   }
 
-  const db = getDb();
+  const [projects, education, experience, skills] = await Promise.all([
+    Project.find({}),
+    Education.find({}),
+    Experience.find({}),
+    Skill.find({})
+  ]);
   
-  const projectsSchema = db.projects.map(p => 
+  const projectsSchema = projects.map(p => 
     `- **${p.name}** (${p.category}): ${p.description}. Technologies used: ${p.technologies.join(', ')}.`
   ).join('\n');
 
-  const educationSchema = db.education.map(e => 
+  const educationSchema = education.map(e => 
     `- **${e.degree}** from ${e.institution} (${e.duration}) - CGPA/Percentage: ${e.cgpa}. ${e.description}`
   ).join('\n');
 
-  const experienceSchema = db.experience.length > 0 
-    ? db.experience.map(exp => `- **${exp.role}** at ${exp.company} (${exp.duration}). technologies: ${exp.technologies.join(', ')}. ${exp.description}`).join('\n')
+  const experienceSchema = experience.length > 0 
+    ? experience.map(exp => `- **${exp.role}** at ${exp.company} (${exp.duration}). technologies: ${exp.technologies.join(', ')}. ${exp.description}`).join('\n')
     : "No continuous agency experience records added yet. (Experience details will be updated soon).";
 
-  const skillsSchema = db.skills.map(c => 
+  const skillsSchema = skills.map(c => 
     `* **${c.name}**: ${c.skills.join(', ')}`
   ).join('\n');
 

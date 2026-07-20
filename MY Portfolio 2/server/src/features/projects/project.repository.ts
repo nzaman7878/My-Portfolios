@@ -1,40 +1,43 @@
-import { getDb, saveDb } from '../../db/dbHelper.js';
+import Project from '../../models/Project.js';
+import Stats from '../../models/Stats.js';
 
-export const getAllProjects = () => getDb().projects;
-export const getProjectById = (id: string) => getDb().projects.find(p => p.id === id);
-export const saveProject = (project) => {
-  const db = getDb();
-  db.projects.push(project);
-  saveDb(db);
+export const getAllProjects = async () => {
+  return await Project.find({});
 };
-export const updateProject = (id: string, updatedData) => {
-  const db = getDb();
-  const index = db.projects.findIndex(p => p.id === id);
-  if (index !== -1) {
-    db.projects[index] = { ...db.projects[index], ...updatedData };
-    saveDb(db);
-    return db.projects[index];
-  }
-  return null;
+
+export const getProjectById = async (id: string) => {
+  return await Project.findById(id);
 };
-export const deleteProject = (id: string) => {
-  const db = getDb();
-  const initialLength = db.projects.length;
-  db.projects = db.projects.filter(p => p.id !== id);
-  if (db.projects.length !== initialLength) {
-    saveDb(db);
-    return true;
-  }
-  return false;
+
+export const saveProject = async (projectData) => {
+  const project = new Project(projectData);
+  await project.save();
+  return project;
 };
-export const incrementProjectViews = (id: string) => {
-  const db = getDb();
-  const project = db.projects.find(p => p.id === id);
+
+export const updateProject = async (id: string, updatedData) => {
+  return await Project.findByIdAndUpdate(id, updatedData, { new: true });
+};
+
+export const deleteProject = async (id: string) => {
+  const result = await Project.findByIdAndDelete(id);
+  return result !== null;
+};
+
+export const incrementProjectViews = async (id: string) => {
+  const project = await Project.findByIdAndUpdate(
+    id,
+    { $inc: { views: 1 } },
+    { new: true }
+  );
+
   if (project) {
-    project.views = (project.views || 0) + 1;
-    db.stats.projectClicks += 1;
-    saveDb(db);
-    return { views: project.views, totalClicks: db.stats.projectClicks };
+    const stats = await Stats.findOneAndUpdate(
+      {},
+      { $inc: { projectClicks: 1 } },
+      { new: true, upsert: true }
+    );
+    return { views: project.views, totalClicks: stats.projectClicks };
   }
   return null;
 };

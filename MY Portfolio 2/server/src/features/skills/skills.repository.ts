@@ -1,13 +1,9 @@
-import { getDb, saveDb } from '../../db/dbHelper.js';
+import Skill from '../../models/Skill.js';
 
-export const getAllSkills = () => getDb().skills;
-export const updateSkillCategory = (id: string, skills: string[]) => {
-  const db = getDb();
-  const categoryIndex = db.skills.findIndex(cat => cat.id === id);
-  if (categoryIndex !== -1) {
-    db.skills[categoryIndex].skills = skills;
-    saveDb(db);
-    return db.skills[categoryIndex];
-  }
-  return null;
+export const getAllSkills = async () => {
+  return await Skill.find({});
+};
+
+export const updateSkillCategory = async (id: string, skills: string[]) => {
+  return await Skill.findByIdAndUpdate(id, { skills }, { new: true });
 };

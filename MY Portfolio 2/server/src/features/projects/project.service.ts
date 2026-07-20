@@ -1,24 +1,21 @@
 import * as repository from './project.repository.js';
 import { ApiError } from '../../core/ApiError.js';
 
-const generateId = () => Math.random().toString(36).substring(2, 11);
+export const getProjects = async () => await repository.getAllProjects();
 
-export const getProjects = () => repository.getAllProjects();
-
-export const trackProjectClick = (id: string) => {
-  const result = repository.incrementProjectViews(id);
+export const trackProjectClick = async (id: string) => {
+  const result = await repository.incrementProjectViews(id);
   if (!result) throw new ApiError(404, 'Project not found');
   return result;
 };
 
-export const createProject = (data) => {
+export const createProject = async (data) => {
   const { name, description, technologies, githubLink, liveLink, category, image, features } = data;
   if (!name || !description || !technologies || !category) {
     throw new ApiError(400, 'Missing required project attributes.');
   }
 
   const newProject = {
-    id: generateId(),
     name,
     description,
     technologies: Array.isArray(technologies) ? technologies : [technologies],
@@ -30,32 +27,32 @@ export const createProject = (data) => {
     views: 0
   };
 
-  repository.saveProject(newProject);
-  return newProject;
+  return await repository.saveProject(newProject);
 };
 
-export const updateProject = (id: string, data) => {
+export const updateProject = async (id: string, data) => {
   const { name, description, technologies, githubLink, liveLink, category, image, features } = data;
   
-  const current = repository.getProjectById(id);
+  const current = await repository.getProjectById(id);
   if (!current) throw new ApiError(404, 'Project not found.');
 
   const updatedData = {
     name: name || current.name,
     description: description || current.description,
-    technologies: Array.isArray(technologies) ? technologies : current.technologies,
+    technologies: technologies ? (Array.isArray(technologies) ? technologies : [technologies]) : current.technologies,
     githubLink: githubLink !== undefined ? githubLink : current.githubLink,
     liveLink: liveLink !== undefined ? liveLink : current.liveLink,
     category: category || current.category,
     image: image || current.image,
-    features: Array.isArray(features) ? features : current.features
+    features: features ? (Array.isArray(features) ? features : [features]) : current.features
   };
 
-  return repository.updateProject(id, updatedData);
+  return await repository.updateProject(id, updatedData);
 };
 
-export const deleteProject = (id: string) => {
-  if (!repository.deleteProject(id)) {
+export const deleteProject = async (id: string) => {
+  const deleted = await repository.deleteProject(id);
+  if (!deleted) {
     throw new ApiError(404, 'Project not found.');
   }
 };

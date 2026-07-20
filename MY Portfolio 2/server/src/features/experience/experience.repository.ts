@@ -1,29 +1,24 @@
-import { getDb, saveDb } from '../../db/dbHelper.js';
+import Experience from '../../models/Experience.js';
 
-export const getAllExperience = () => getDb().experience;
-export const getExperienceById = (id: string) => getDb().experience.find(e => e.id === id);
-export const saveExperience = (exp) => {
-  const db = getDb();
-  db.experience.push(exp);
-  saveDb(db);
+export const getAllExperience = async () => {
+  return await Experience.find({});
 };
-export const updateExperience = (id: string, updatedData) => {
-  const db = getDb();
-  const index = db.experience.findIndex(e => e.id === id);
-  if (index !== -1) {
-    db.experience[index] = { ...db.experience[index], ...updatedData };
-    saveDb(db);
-    return db.experience[index];
-  }
-  return null;
+
+export const getExperienceById = async (id: string) => {
+  return await Experience.findById(id);
 };
-export const deleteExperience = (id: string) => {
-  const db = getDb();
-  const initialLength = db.experience.length;
-  db.experience = db.experience.filter(e => e.id !== id);
-  if (db.experience.length !== initialLength) {
-    saveDb(db);
-    return true;
-  }
-  return false;
+
+export const saveExperience = async (expData) => {
+  const exp = new Experience(expData);
+  await exp.save();
+  return exp;
+};
+
+export const updateExperience = async (id: string, updatedData) => {
+  return await Experience.findByIdAndUpdate(id, updatedData, { new: true });
+};
+
+export const deleteExperience = async (id: string) => {
+  const result = await Experience.findByIdAndDelete(id);
+  return result !== null;
 };

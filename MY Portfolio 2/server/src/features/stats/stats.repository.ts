@@ -1,15 +1,26 @@
-import { getDb, saveDb } from '../../db/dbHelper.js';
+import Stats from '../../models/Stats.js';
 
-export const getStats = () => getDb().stats;
-export const incrementVisitor = () => {
-  const db = getDb();
-  db.stats.visitors += 1;
-  saveDb(db);
-  return db.stats;
+export const getStats = async () => {
+  let stats = await Stats.findOne({});
+  if (!stats) {
+    stats = new Stats();
+    await stats.save();
+  }
+  return stats;
 };
-export const incrementLike = () => {
-  const db = getDb();
-  db.stats.likes += 1;
-  saveDb(db);
-  return db.stats;
+
+export const incrementVisitor = async () => {
+  return await Stats.findOneAndUpdate(
+    {},
+    { $inc: { visitors: 1 } },
+    { new: true, upsert: true }
+  );
+};
+
+export const incrementLike = async () => {
+  return await Stats.findOneAndUpdate(
+    {},
+    { $inc: { likes: 1 } },
+    { new: true, upsert: true }
+  );
 };
