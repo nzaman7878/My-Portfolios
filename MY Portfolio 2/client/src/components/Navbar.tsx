@@ -165,10 +165,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
                   setIsMobileMenuOpen(false);
                   setView('admin');
                 }}
-                className="flex items-center space-x-1.5 w-full justify-center py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition"
+                className="flex items-center space-x-1.5 w-full justify-center py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition active:scale-98"
               >
                 <LayoutDashboard size={14} />
-                <span>{isAdminLoggedIn ? 'Admin Dashboard' : 'Sign In as Admin'}</span>
+                <span>{isAdminLoggedIn ? 'Dashboard' : 'Admin Login'}</span>
               </button>
             ) : (
               <div className="flex items-center space-x-2 w-full">

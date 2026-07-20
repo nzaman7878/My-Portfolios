@@ -118,7 +118,7 @@ Technical Focus:
   };
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden bg-[#FAF9F6] dark:bg-[#08080A]">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center py-28 overflow-hidden bg-[#FAF9F6] dark:bg-[#08080A]">
       
       {/* 2026 Architectural Grid Lines */}
       <div className="absolute inset-x-0 top-0 h-[1px] bg-neutral-200/40 dark:bg-white/5 pointer-events-none" />
@@ -293,7 +293,7 @@ export const About: React.FC = () => {
           {/* Description & Technical Pillars */}
           <div className="lg:col-span-7 space-y-6">
             <h3 className="text-xl sm:text-2xl font-light tracking-tight text-neutral-900 dark:text-slate-100">
-              Technology has always been more than just a career path for me—it's a way to create <span className="font-serif italic font-light text-indigo-550 dark:text-[#06B6D4]">meaningful solutions.</span>
+              Technology has always been more than just a career path for me—it's a way to create <span className="font-serif italic font-light text-indigo-600 dark:text-[#06B6D4]">meaningful solutions.</span>
             </h3>
             
             <p className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
@@ -342,7 +342,7 @@ export const EducationSection: React.FC<{ education: Education[] }> = ({ educati
               className="relative group"
             >
               {/* Timeline Pin Node */}
-              <div className="absolute -left-[39px] top-2 h-3.5 w-3.5 rounded-full border border-neutral-300 dark:border-slate-800 bg-[#FAF9F6] dark:bg-[#08080A] group-hover:bg-indigo-550 dark:group-hover:bg-[#06B6D4] transition duration-300" />
+              <div className="absolute -left-[39px] top-2 h-3.5 w-3.5 rounded-full border border-neutral-300 dark:border-slate-800 bg-[#FAF9F6] dark:bg-[#08080A] group-hover:bg-indigo-600 dark:group-hover:bg-[#06B6D4] transition duration-300" />
 
               <div className="space-y-3 pb-8 border-b border-neutral-200/40 dark:border-white/[0.03]">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -551,7 +551,7 @@ export const Projects: React.FC<{
                 {/* Body details */}
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div className="space-y-3.5">
-                    <h3 className="text-lg font-light text-neutral-900 dark:text-slate-100 group-hover:text-indigo-550 dark:group-hover:text-[#06B6D4] transition duration-200 font-sans">
+                    <h3 className="text-lg font-light text-neutral-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-[#06B6D4] transition duration-200 font-sans">
                       {proj.name}
                     </h3>
                     <p className="text-xs sm:text-sm text-neutral-450 dark:text-slate-400 line-clamp-3 leading-relaxed">
@@ -609,6 +609,8 @@ export const Projects: React.FC<{
           {selectedProject && (
             <div className="fixed inset-0 z-50 overflow-y-auto bg-neutral-900/95 flex items-center justify-center p-4">
               <motion.div 
+                role="dialog"
+                aria-modal="true"
                 initial={{ scale: 0.97, y: 15, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.97, y: 15, opacity: 0 }}
@@ -742,7 +744,7 @@ export const ExperienceSection: React.FC<{ experience: Experience[] }> = ({ expe
                 <div className="space-y-3 pb-8 border-b border-neutral-200/40 dark:border-white/[0.03]">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <div className="space-y-1">
-                      <span className="text-[10px] font-mono tracking-wider text-indigo-550 dark:text-[#06B6D4]">
+                      <span className="text-[10px] font-mono tracking-wider text-indigo-600 dark:text-[#06B6D4]">
                         {exp.duration}
                       </span>
                       <h4 className="text-lg sm:text-xl font-light text-neutral-900 dark:text-slate-100">
@@ -979,53 +981,53 @@ export const ContactSection: React.FC = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] text-neutral-400 font-mono uppercase block">01 / Your Name</label>
+                  <label className="text-[10px] text-neutral-500 font-mono uppercase block">01 / Your Name</label>
                   <input 
                     type="text" 
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="E.g., Dr. Mitchell"
-                    className="w-full text-xs px-3.5 py-3 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
+                    className="w-full text-sm px-3.5 py-3 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] text-neutral-400 font-mono uppercase block">02 / Return Address</label>
+                  <label className="text-[10px] text-neutral-500 font-mono uppercase block">02 / Return Address</label>
                   <input 
                     type="email" 
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="return@namespace.io"
-                    className="w-full text-xs px-3.5 py-3 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
+                    className="w-full text-sm px-3.5 py-3 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-neutral-400 font-mono uppercase block">03 / Subject Matter</label>
+                <label className="text-[10px] text-neutral-500 font-mono uppercase block">03 / Subject Matter</label>
                 <input 
                   type="text" 
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
                   placeholder="System integration request..."
-                  className="w-full text-xs px-3.5 py-3 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
+                  className="w-full text-sm px-3.5 py-3 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] text-neutral-400 font-mono uppercase block">04 / Detailed Transcript</label>
+                <label className="text-[10px] text-neutral-500 font-mono uppercase block">04 / Detailed Transcript</label>
                 <textarea 
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={4}
                   placeholder="Draft project specifications, timelines, or scopes..."
-                  className="w-full text-xs px-3.5 py-3.5 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
+                  className="w-full text-sm px-3.5 py-3.5 border-b border-neutral-200 focus:border-neutral-800 dark:border-white/10 dark:focus:border-white bg-transparent text-neutral-800 dark:text-slate-100 focus:outline-none transition duration-200"
                   required
                 />
               </div>
@@ -1046,7 +1048,7 @@ export const ContactSection: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 bg-neutral-950 hover:bg-neutral-900 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-100 disabled:opacity-60 text-white rounded-xl text-xs font-mono font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center space-x-2 active:scale-98"
+                className="w-full py-4 bg-neutral-950 hover:bg-neutral-900 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-100 disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-xl text-xs font-mono font-bold tracking-widest uppercase transition-all duration-300 flex items-center justify-center space-x-2 active:scale-98"
               >
                 <Send size={12} />
                 <span>{isSubmitting ? 'TRANSMITTING PACKET...' : 'TRANSMIT MESSAGE'}</span>

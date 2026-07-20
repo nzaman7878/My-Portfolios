@@ -201,6 +201,8 @@ export const AiAssistant: React.FC = () => {
       {/* Floating launcher trigger circle */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label="Toggle AI Assistant"
+        aria-expanded={isOpen}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="w-14 h-14 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 shadow-lg flex items-center justify-center cursor-pointer border border-neutral-800 dark:border-neutral-200 relative"

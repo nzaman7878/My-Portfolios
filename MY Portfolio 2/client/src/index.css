@@ -19,12 +19,29 @@
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Scrollbar customizations */
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
+/* Elegant Scrollbar customizations */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.5);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.2);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.4);
+}
+
 .scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  scrollbar-width: thin;
 }
 
