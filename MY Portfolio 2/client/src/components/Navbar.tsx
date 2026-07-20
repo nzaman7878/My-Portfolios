@@ -93,13 +93,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
 
               {/* Admin Area Trigger */}
               {currentView === 'portfolio' ? (
-                <button
-                  onClick={() => setView('admin')}
-                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 hover:scale-102 transition shadow-sm active:scale-98"
-                >
-                  <LayoutDashboard size={14} />
-                  <span>{isAdminLoggedIn ? 'Dashboard' : 'Admin Login'}</span>
-                </button>
+                isAdminLoggedIn && (
+                  <button
+                    onClick={() => setView('admin')}
+                    className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 hover:scale-102 transition shadow-sm active:scale-98"
+                  >
+                    <LayoutDashboard size={14} />
+                    <span>Dashboard</span>
+                  </button>
+                )
               ) : (
                 <div className="flex items-center space-x-2">
                   <button
@@ -160,16 +162,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView, isAdminLog
 
           <div className="pt-3 border-t border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
             {currentView === 'portfolio' ? (
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setView('admin');
-                }}
-                className="flex items-center space-x-1.5 w-full justify-center py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition active:scale-98"
-              >
-                <LayoutDashboard size={14} />
-                <span>{isAdminLoggedIn ? 'Dashboard' : 'Admin Login'}</span>
-              </button>
+              isAdminLoggedIn && (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setView('admin');
+                  }}
+                  className="flex items-center space-x-1.5 w-full justify-center py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition active:scale-98"
+                >
+                  <LayoutDashboard size={14} />
+                  <span>Dashboard</span>
+                </button>
+              )
             ) : (
               <div className="flex items-center space-x-2 w-full">
                 <button

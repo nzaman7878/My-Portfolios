@@ -10,7 +10,26 @@ import { Project, Education, Experience, SkillCategory, PortfolioStats } from '.
 import { Cpu, Terminal, ArrowUp, Heart, Sparkles } from 'lucide-react';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'portfolio' | 'admin'>('portfolio');
+  const [currentView, setCurrentView] = useState<'portfolio' | 'admin'>(() => {
+    return window.location.pathname === '/admin' ? 'admin' : 'portfolio';
+  });
+
+  useEffect(() => {
+    if (currentView === 'admin' && window.location.pathname !== '/admin') {
+      window.history.pushState(null, '', '/admin');
+    } else if (currentView === 'portfolio' && window.location.pathname !== '/') {
+      window.history.pushState(null, '', '/');
+    }
+  }, [currentView]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentView(window.location.pathname === '/admin' ? 'admin' : 'portfolio');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
 
