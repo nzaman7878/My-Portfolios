@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import compression from 'compression';
+import morgan from 'morgan';
 import { env } from './config/env.js';
 import { errorHandler } from './middlewares/error.middleware.js';
 
@@ -13,8 +16,14 @@ import skillsRoutes from './features/skills/skills.routes.js';
 import messageRoutes from './features/messages/messages.routes.js';
 import statsRoutes from './features/stats/stats.routes.js';
 import chatRoutes from './features/chat/chat.routes.js';
+import settingsRoutes from './features/settings/settings.routes.js';
 
 const app = express();
+
+// Security and performance middleware
+app.use(helmet());
+app.use(compression());
+app.use(morgan('dev'));
 
 app.use(cors());
 app.use(express.json());
@@ -30,6 +39,7 @@ app.use('/api/contact', messageRoutes);
 app.use('/api/admin/messages', messageRoutes); // We can refine route paths later, for now just use the same router
 app.use('/api/stats', statsRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Global Error Handler
 app.use(errorHandler);

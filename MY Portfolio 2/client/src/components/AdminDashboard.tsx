@@ -4,7 +4,7 @@ import {
   Layers, GraduationCap, Briefcase, Mail, BarChart3, Settings, ShieldCheck, 
   Terminal, Server, Code, BookmarkPlus, Ban, Tag, X, FileEdit
 } from 'lucide-react';
-import { Project, Education, Experience, ContactMessage, SkillCategory, PortfolioStats } from '../types.js';
+import { Project, Education, Experience, ContactMessage, SkillCategory, PortfolioStats, SiteSettings as SiteSettingsType } from '../types.js';
 
 interface AdminDashboardProps {
   isAdminLoggedIn: boolean;
@@ -15,6 +15,7 @@ interface AdminDashboardProps {
   experience: Experience[];
   skills: SkillCategory[];
   stats: PortfolioStats;
+  siteSettings: SiteSettingsType | null;
   onRefreshData: () => void;
 }
 
@@ -27,6 +28,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   experience,
   skills,
   stats,
+  siteSettings,
   onRefreshData
 }) => {
   // Login Form States
@@ -36,7 +38,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Dashboard Sub-navigation Tabs
-  const [activeTab, setActiveTab] = useState<'analytics' | 'projects' | 'education' | 'experience' | 'skills' | 'messages'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'projects' | 'education' | 'experience' | 'skills' | 'messages' | 'settings'>('analytics');
 
   // Unified notifications
   const [successNotif, setSuccessNotif] = useState('');
@@ -79,6 +81,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     description: '',
     technologies: ''
   });
+
+  // Global Settings Form
+  const [settingsForm, setSettingsForm] = useState<SiteSettingsType | null>(null);
+
+  useEffect(() => {
+    if (siteSettings) {
+      setSettingsForm(siteSettings);
+    }
+  }, [siteSettings]);
 
   // Fetch administrator messages if token exists
   const fetchMessages = async () => {
@@ -417,6 +428,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
+  // ===================================
+  // SETTINGS HANDLERS
+  // ===================================
+  const handleSaveSettingsSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!settingsForm) return;
+
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settingsForm)
+      });
+      if (res.ok) {
+        triggerNotification('Site configuration synchronized successfully.', '');
+      } else {
+        triggerNotification('', 'Failed to synchronize site settings.');
+      }
+    } catch (err) {
+      console.error(err);
+      triggerNotification('', 'Network sync error.');
+    }
+  };
+
   // ==========================================
   // UNRESTRICTED: LOGIN card if token is null
   // ==========================================
@@ -617,6 +652,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 {messages.some(m => !m.read) && (
                   <span className="absolute right-3.5 top-3 h-2 w-2 rounded-full bg-red-500" />
                 )}
+              </button>
+
+              <button
+                onClick={() => { setActiveTab('settings'); }}
+                className={`w-full py-2.5 px-3 rounded-xl font-bold flex items-center space-x-2.5 transition active:scale-98 ${
+                  activeTab === 'settings' 
+                    ? 'bg-indigo-600 text-white' 
+                    : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-950/50'
+                }`}
+              >
+                <Settings size={15} />
+                <span>Global Site Config</span>
               </button>
             </div>
           </div>
@@ -1215,6 +1262,119 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     )}
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* TAB 7: GLOBAL SETTINGS */}
+            {activeTab === 'settings' && settingsForm && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-bold text-neutral-800 dark:text-neutral-100 uppercase tracking-wide">Global Site Configuration</h3>
+                </div>
+
+                <form onSubmit={handleSaveSettingsSubmit} className="space-y-6">
+                  
+                  {/* HERO CONFIG */}
+                  <div className="p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-4">
+                    <h4 className="text-sm font-bold text-neutral-800 dark:text-neutral-100 border-b border-neutral-200 dark:border-neutral-800 pb-2">Hero Section</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Subtitle</label>
+                        <input type="text" value={settingsForm.hero.subtitle} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, subtitle: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Title</label>
+                        <input type="text" value={settingsForm.hero.title} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, title: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Short Description</label>
+                      <input type="text" value={settingsForm.hero.description} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, description: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Long Description</label>
+                      <textarea rows={3} value={settingsForm.hero.longDescription} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, longDescription: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Downloadable Resume Content (Text)</label>
+                      <textarea rows={6} value={settingsForm.hero.resumeText} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, resumeText: e.target.value }})} className="w-full text-xs font-mono px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    </div>
+                  </div>
+
+                  {/* PROFILE CONFIG */}
+                  <div className="p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-4">
+                    <h4 className="text-sm font-bold text-neutral-800 dark:text-neutral-100 border-b border-neutral-200 dark:border-neutral-800 pb-2">Profile Widget</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Name</label>
+                        <input type="text" value={settingsForm.profile.name} onChange={e => setSettingsForm({ ...settingsForm, profile: { ...settingsForm.profile, name: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Location Text</label>
+                        <input type="text" value={settingsForm.profile.location} onChange={e => setSettingsForm({ ...settingsForm, profile: { ...settingsForm.profile, location: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Avatar Image URL</label>
+                      <input type="url" value={settingsForm.profile.image} onChange={e => setSettingsForm({ ...settingsForm, profile: { ...settingsForm.profile, image: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    </div>
+                  </div>
+
+                  {/* ABOUT CONFIG */}
+                  <div className="p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-4">
+                    <h4 className="text-sm font-bold text-neutral-800 dark:text-neutral-100 border-b border-neutral-200 dark:border-neutral-800 pb-2">About Section</h4>
+                    <div className="space-y-1">
+                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Section Title</label>
+                      <input type="text" value={settingsForm.about.title} onChange={e => setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, title: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Side Image URL</label>
+                      <input type="url" value={settingsForm.about.image} onChange={e => setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, image: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    </div>
+                    <div className="space-y-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
+                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Paragraphs</label>
+                      {settingsForm.about.paragraphs.map((p, idx) => (
+                        <div key={idx} className="flex gap-2">
+                          <textarea rows={2} value={p} onChange={e => {
+                            const newParas = [...settingsForm.about.paragraphs];
+                            newParas[idx] = e.target.value;
+                            setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, paragraphs: newParas } });
+                          }} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                          <button type="button" onClick={() => {
+                            const newParas = settingsForm.about.paragraphs.filter((_, i) => i !== idx);
+                            setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, paragraphs: newParas } });
+                          }} className="text-red-500 px-2 rounded hover:bg-red-50 dark:hover:bg-red-950/30">✕</button>
+                        </div>
+                      ))}
+                      <button type="button" onClick={() => {
+                        setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, paragraphs: [...settingsForm.about.paragraphs, ""] } });
+                      }} className="text-[10px] font-bold text-indigo-500 hover:text-indigo-600 dark:text-indigo-400">+ Add Paragraph</button>
+                    </div>
+                  </div>
+
+                  {/* SOCIAL LINKS */}
+                  <div className="p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-4">
+                    <h4 className="text-sm font-bold text-neutral-800 dark:text-neutral-100 border-b border-neutral-200 dark:border-neutral-800 pb-2">Social Links</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">GitHub</label>
+                        <input type="url" value={settingsForm.social.github} onChange={e => setSettingsForm({ ...settingsForm, social: { ...settingsForm.social, github: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">LinkedIn</label>
+                        <input type="url" value={settingsForm.social.linkedin} onChange={e => setSettingsForm({ ...settingsForm, social: { ...settingsForm.social, linkedin: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Twitter</label>
+                        <input type="url" value={settingsForm.social.twitter} onChange={e => setSettingsForm({ ...settingsForm, social: { ...settingsForm.social, twitter: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition">
+                    Save Site Configuration
+                  </button>
+                </form>
               </div>
             )}
           </div>

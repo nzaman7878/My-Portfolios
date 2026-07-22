@@ -58,3 +58,29 @@ export interface ChatMessage {
   text: string;
   timestamp: string;
 }
+
+export interface SiteSettings {
+  _id?: string;
+  hero: {
+    subtitle: string;
+    title: string;
+    description: string;
+    longDescription: string;
+    resumeText: string;
+  };
+  social: {
+    github: string;
+    linkedin: string;
+    twitter: string;
+  };
+  profile: {
+    image: string;
+    name: string;
+    location: string;
+  };
+  about: {
+    image: string;
+    title: string;
+    paragraphs: string[];
+  };
+}

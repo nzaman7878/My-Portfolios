@@ -82,7 +82,7 @@ const TypingAnimation: React.FC = () => {
 // ==========================================================
 // 1. HERO SECTION
 // ==========================================================
-export const Hero: React.FC<{ stats: PortfolioStats; onLike: () => void }> = ({ stats, onLike }) => {
+export const Hero: React.FC<{ stats: PortfolioStats; onLike: () => void; settings: import('../types.js').SiteSettings }> = ({ stats, onLike, settings }) => {
   const [likeScale, setLikeScale] = useState(false);
 
   const handleScrollToContact = () => {
@@ -91,16 +91,7 @@ export const Hero: React.FC<{ stats: PortfolioStats; onLike: () => void }> = ({ 
   };
 
   const handleDownloadDraftResume = () => {
-    const cvContent = `
-Nuruzzaman
-MERN Stack & Generative AI Developer
-Email: nuruzzaman31032001@gmail.com
-
-Technical Focus:
-- Node.js, React, MongoDB, Express (MERN Stack)
-- Server-side LLM Integration, Vector Databases, Context-aware RAG pipelines
-- Production systems engineering, TypeScript, cloud run optimization
-    `;
+    const cvContent = settings.hero.resumeText;
     const blob = new Blob([cvContent.trim()], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -140,19 +131,19 @@ Technical Focus:
 
           <div className="space-y-4">
             <p className="text-xs sm:text-sm font-mono tracking-wider text-neutral-400 dark:text-neutral-500">
-              NURUZZAMAN — FULL-STACK AI ENGINEER
+              {settings.hero.subtitle}
             </p>
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-extralight tracking-tight text-neutral-800 dark:text-white leading-tight">
-              Designing and building <span className="font-serif italic font-light text-neutral-950 dark:text-neutral-300">modern web applications</span> with MERN and AI.
+              {settings.hero.title}
             </h1>
           </div>
 
           <div className="text-sm text-neutral-500 dark:text-neutral-400 min-h-[2.5rem] flex items-center">
-            Hi, I'm Nuruzzaman, a Full-Stack AI Engineer based in Assam, India.
+            {settings.hero.description}
           </div>
 
           <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-lg">
-            I build scalable web applications with the MERN stack and continuously explore Generative AI to create smarter, more capable software. I enjoy solving complex problems, designing intuitive user experiences, and turning ideas into reliable products that people love to use.
+            {settings.hero.longDescription}
           </p>
 
           {/* Action Row */}
@@ -177,13 +168,13 @@ Technical Focus:
           <div className="flex items-center space-x-4 pt-4 border-t border-neutral-200/40 dark:border-white/[0.03] max-w-xs">
             <span className="text-[10px] font-mono tracking-wider text-neutral-400">CONNECT</span>
             <div className="flex space-x-2.5">
-              <a href="https://github.com" target="_blank" rel="noreferrer" className="p-2 text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition">
+              <a href={settings.social.github} target="_blank" rel="noreferrer" className="p-2 text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition">
                 <Github size={14} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-2 text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition">
+              <a href={settings.social.linkedin} target="_blank" rel="noreferrer" className="p-2 text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition">
                 <Linkedin size={14} />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="p-2 text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition">
+              <a href={settings.social.twitter} target="_blank" rel="noreferrer" className="p-2 text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition">
                 <Twitter size={14} />
               </a>
             </div>
@@ -198,15 +189,15 @@ Technical Focus:
             <div className="flex items-center space-x-4 pb-6 border-b border-neutral-100 dark:border-white/5">
               <div className="relative h-16 w-16 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-white/10 shrink-0">
                 <img 
-                  src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80" 
-                  alt="Nuruzzaman"
+                  src={settings.profile.image} 
+                  alt={settings.profile.name}
                   className="h-full w-full object-cover grayscale brightness-95 contrast-105"
                   referrerPolicy="no-referrer"
                 />
               </div>
               <div className="text-left">
-                <h3 className="text-sm font-semibold text-neutral-800 dark:text-slate-100">Nuruzzaman</h3>
-                <p className="text-[10px] font-mono text-neutral-400 mt-0.5">EST. GAUHATI, ASSAM</p>
+                <h3 className="text-sm font-semibold text-neutral-800 dark:text-slate-100">{settings.profile.name}</h3>
+                <p className="text-[10px] font-mono text-neutral-400 mt-0.5">{settings.profile.location}</p>
                 <span className="text-[10px] font-mono text-emerald-500 font-bold flex items-center space-x-1 mt-1">
                   <span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse mr-1" />
                   STABLE SYNC
@@ -258,7 +249,7 @@ Technical Focus:
 // ==========================================================
 // 2. ABOUT ME SECTION
 // ==========================================================
-export const About: React.FC = () => {
+export const About: React.FC<{ settings: import('../types.js').SiteSettings }> = ({ settings }) => {
   return (
     <section id="about" className="py-28 bg-white dark:bg-[#070709] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -271,7 +262,7 @@ export const About: React.FC = () => {
           <div className="lg:col-span-5 space-y-6">
             <div className="relative rounded-[2rem] overflow-hidden border border-neutral-200 dark:border-white/5 bg-neutral-50 dark:bg-neutral-900">
               <img 
-                src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80" 
+                src={settings.about.image} 
                 alt="Architectural space"
                 className="w-full h-80 object-cover grayscale contrast-110 saturate-50 hover:scale-102 transition duration-500"
                 referrerPolicy="no-referrer"
@@ -293,24 +284,14 @@ export const About: React.FC = () => {
           {/* Description & Technical Pillars */}
           <div className="lg:col-span-7 space-y-6">
             <h3 className="text-xl sm:text-2xl font-light tracking-tight text-neutral-900 dark:text-slate-100">
-              Technology has always been more than just a career path for me—it's a way to create <span className="font-serif italic font-light text-indigo-600 dark:text-[#06B6D4]">meaningful solutions.</span>
+              {settings.about.title}
             </h3>
             
-            <p className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
-              I recently completed my Master's degree in Information Technology and have dedicated my time to building full-stack applications that combine clean design, scalable architecture, and practical functionality. My work spans modern web development, backend systems, REST APIs, authentication, database design, and cloud deployment.
-            </p>
-            
-            <p className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
-              Beyond traditional web development, I'm expanding my expertise into Generative AI and intelligent applications. I'm particularly interested in how AI can improve user experiences, automate workflows, and help build products that solve real-world problems.
-            </p>
-            
-            <p className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
-              I believe the best software is simple, reliable, and thoughtfully designed. Whether I'm building from scratch or improving an existing product, I focus on writing maintainable code, paying attention to details, and continuously learning better ways to build.
-            </p>
-
-            <p className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
-              When I'm not developing applications, you'll usually find me exploring new technologies, studying software architecture, improving my problem-solving skills, or experimenting with new ideas that challenge me to grow as an engineer.
-            </p>
+            {settings.about.paragraphs.map((para, idx) => (
+              <p key={idx} className="text-xs sm:text-sm text-neutral-500 dark:text-slate-400 leading-relaxed">
+                {para}
+              </p>
+            ))}
 
           </div>
         </div>
@@ -869,7 +850,7 @@ export const Certifications: React.FC = () => {
 // ==========================================================
 // 8. CONTACT SECTION
 // ==========================================================
-export const ContactSection: React.FC = () => {
+export const ContactSection: React.FC<{ settings?: import('../types.js').SiteSettings }> = ({ settings }) => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
@@ -948,7 +929,7 @@ export const ContactSection: React.FC = () => {
               <h4 className="text-[10px] font-mono tracking-widest uppercase text-neutral-400">ENCRYPTED PUBLIC KEYS</h4>
               <div className="flex gap-3">
                 <a 
-                  href="https://github.com" 
+                  href={settings?.social?.github || "https://github.com"} 
                   target="_blank" 
                   rel="noreferrer" 
                   className="flex-1 py-3.5 bg-white dark:bg-white/[0.03] rounded-xl border border-neutral-200 dark:border-white/5 flex items-center justify-center space-x-2 font-bold text-xs text-neutral-700 dark:text-slate-200 hover:border-neutral-400 dark:hover:border-white/20 transition-all duration-300"
@@ -957,7 +938,7 @@ export const ContactSection: React.FC = () => {
                   <span>GitHub</span>
                 </a>
                 <a 
-                  href="https://linkedin.com" 
+                  href={settings?.social?.linkedin || "https://linkedin.com"} 
                   target="_blank" 
                   rel="noreferrer" 
                   className="flex-1 py-3.5 bg-white dark:bg-white/[0.03] rounded-xl border border-neutral-200 dark:border-white/5 flex items-center justify-center space-x-2 font-bold text-xs text-neutral-700 dark:text-slate-200 hover:border-neutral-400 dark:hover:border-white/20 transition-all duration-300"

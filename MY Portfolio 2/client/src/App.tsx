@@ -6,7 +6,7 @@ import { AdminDashboard } from './components/AdminDashboard.js';
 import { 
   Hero, About, EducationSection, Skills, Projects, ExperienceSection, Certifications, ContactSection 
 } from './components/PortfolioSections.js';
-import { Project, Education, Experience, SkillCategory, PortfolioStats } from './types.js';
+import { Project, Education, Experience, SkillCategory, PortfolioStats, SiteSettings } from './types.js';
 import { Cpu, Terminal, ArrowUp, Heart, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -44,6 +44,7 @@ export default function App() {
     messagesReceived: 0,
     likes: 0
   });
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   const [loadingResources, setLoadingResources] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -51,12 +52,13 @@ export default function App() {
   // Refresh resource arrays from backend API
   const refreshAllResources = async () => {
     try {
-      const [projRes, eduRes, expRes, skillRes, statsRes] = await Promise.all([
+      const [projRes, eduRes, expRes, skillRes, statsRes, settingsRes] = await Promise.all([
         fetch('/api/projects'),
         fetch('/api/education'),
         fetch('/api/experience'),
         fetch('/api/skills'),
-        fetch('/api/stats')
+        fetch('/api/stats'),
+        fetch('/api/settings')
       ]);
 
       if (projRes.ok) setProjectsList(await projRes.json());
@@ -64,6 +66,7 @@ export default function App() {
       if (expRes.ok) setExperienceList(await expRes.json());
       if (skillRes.ok) setSkillsList(await skillRes.json());
       if (statsRes.ok) setStatsData(await statsRes.json());
+      if (settingsRes.ok) setSiteSettings(await settingsRes.json());
     } catch (err) {
       console.error("Error fetching repository documents:", err);
     } finally {
@@ -178,10 +181,10 @@ export default function App() {
             {/* Solid minimal background */}
 
             {/* 1. Hero */}
-            <Hero stats={statsData} onLike={handleLikeSubmit} />
+            {siteSettings && <Hero stats={statsData} onLike={handleLikeSubmit} settings={siteSettings} />}
 
             {/* 2. About Me */}
-            <About />
+            {siteSettings && <About settings={siteSettings} />}
 
             {/* 3. Education Timeline */}
             <EducationSection education={educationList} />
@@ -199,7 +202,7 @@ export default function App() {
             <Certifications />
 
             {/* 8. Contact Form and socials */}
-            <ContactSection />
+            <ContactSection settings={siteSettings || undefined} />
             
             {/* Visual copyright footer */}
             <footer className="py-12 bg-white dark:bg-[#070709] border-t border-neutral-200/50 dark:border-white/5 text-center">
@@ -218,6 +221,7 @@ export default function App() {
             experience={experienceList}
             skills={skillsList}
             stats={statsData}
+            siteSettings={siteSettings}
             onRefreshData={refreshAllResources}
           />
         )}
