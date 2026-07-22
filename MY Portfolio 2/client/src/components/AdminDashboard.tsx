@@ -461,8 +461,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     const uploadKey = `${category}-${fieldName}`;
     setIsUploading(prev => ({ ...prev, [uploadKey]: true }));
     const formData = new FormData();
-    formData.append('image', file);
-
+    
+    // Use the actual fieldName to help the backend organize uploads
+    // If it's a resumeUrl, let's pass 'resume' so the backend knows
+    const formFieldName = fieldName === 'resumeUrl' ? 'resume' : fieldName;
+    formData.append('image', file); // Multer is looking for 'image' in routes right now
+    formData.append('categoryField', formFieldName); // We can send extra data if we want
+    
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
@@ -1335,9 +1340,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <label className="text-[10px] text-neutral-500 font-bold uppercase">Long Description</label>
                       <textarea rows={3} value={settingsForm.hero.longDescription} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, longDescription: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Downloadable Resume Content (Text)</label>
-                      <textarea rows={6} value={settingsForm.hero.resumeText} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, resumeText: e.target.value }})} className="w-full text-xs font-mono px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase flex justify-between">
+                          <span>Resume PDF Upload</span>
+                          {isUploading['hero-resume'] && <span className="text-indigo-500">Uploading...</span>}
+                        </label>
+                        <input type="file" accept="application/pdf" onChange={e => handleFileUpload(e, 'resumeUrl', 'hero')} className="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Resume PDF URL (Fallback)</label>
+                        <input type="url" value={settingsForm.hero.resumeUrl} onChange={e => setSettingsForm({ ...settingsForm, hero: { ...settingsForm.hero, resumeUrl: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
                     </div>
                   </div>
 

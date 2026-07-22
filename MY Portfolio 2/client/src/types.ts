@@ -66,7 +66,7 @@ export interface SiteSettings {
     title: string;
     description: string;
     longDescription: string;
-    resumeText: string;
+    resumeUrl: string;
   };
   social: {
     github: string;

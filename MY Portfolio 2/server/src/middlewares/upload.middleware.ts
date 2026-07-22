@@ -23,22 +23,26 @@ const storage = new CloudinaryStorage({
     if (file.fieldname === 'profile') folder = 'portfolio_uploads/profiles';
     if (file.fieldname === 'hero') folder = 'portfolio_uploads/heroes';
     if (file.fieldname === 'about') folder = 'portfolio_uploads/about';
+    if (file.fieldname === 'resume') folder = 'portfolio_uploads/resumes';
+
+    const isPdf = file.mimetype === 'application/pdf';
 
     return {
       folder: folder,
       public_id: file.fieldname + '-' + uniqueSuffix,
-      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-      transformation: [{ width: 1200, crop: 'limit' }], // optional basic optimization
+      resource_type: isPdf ? 'raw' : 'image',
+      allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif', 'pdf'],
+      transformation: isPdf ? undefined : [{ width: 1200, crop: 'limit' }], // optional basic optimization
     };
   },
 });
 
-// File filter to allow only images
+// File filter to allow only images and PDFs
 const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  if (file.mimetype.startsWith('image/')) {
+  if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
     cb(null, true);
   } else {
-    cb(new ApiError(400, 'Only image files are allowed!'));
+    cb(new ApiError(400, 'Only image and PDF files are allowed!'));
   }
 };
 

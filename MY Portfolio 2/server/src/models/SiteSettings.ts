@@ -6,7 +6,7 @@ export interface ISiteSettings extends Document {
     title: string;
     description: string;
     longDescription: string;
-    resumeText: string;
+    resumeUrl: string;
   };
   social: {
     github: string;
@@ -31,7 +31,7 @@ const siteSettingsSchema = new Schema<ISiteSettings>({
     title: { type: String, default: 'Designing and building modern web applications with MERN and AI.' },
     description: { type: String, default: "Hi, I'm Nuruzzaman, a Full-Stack AI Engineer based in Assam, India." },
     longDescription: { type: String, default: "I build scalable web applications with the MERN stack and continuously explore Generative AI to create smarter, more capable software. I enjoy solving complex problems, designing intuitive user experiences, and turning ideas into reliable products that people love to use." },
-    resumeText: { type: String, default: "Nuruzzaman\nMERN Stack & Generative AI Developer\nEmail: nuruzzaman31032001@gmail.com\n\nTechnical Focus:\n- Node.js, React, MongoDB, Express (MERN Stack)\n- Server-side LLM Integration, Vector Databases, Context-aware RAG pipelines\n- Production systems engineering, TypeScript, cloud run optimization" },
+    resumeUrl: { type: String, default: "" },
   },
   social: {
     github: { type: String, default: 'https://github.com' },

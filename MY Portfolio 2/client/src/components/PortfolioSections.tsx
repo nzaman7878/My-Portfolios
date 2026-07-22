@@ -90,18 +90,6 @@ export const Hero: React.FC<{ stats: PortfolioStats; onLike: () => void; setting
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleDownloadDraftResume = () => {
-    const cvContent = settings.hero.resumeText;
-    const blob = new Blob([cvContent.trim()], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = "Resume_Nuruzzaman_AI_Developer.txt";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const triggerLike = () => {
     setLikeScale(true);
     onLike();
@@ -148,13 +136,15 @@ export const Hero: React.FC<{ stats: PortfolioStats; onLike: () => void; setting
 
           {/* Action Row */}
           <div className="flex flex-wrap items-center gap-4 pt-4">
-            <button
-              onClick={handleDownloadDraftResume}
+            <a
+              href={settings.hero.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
               className="group flex items-center space-x-2.5 px-6 py-3.5 rounded-full text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-100 transition-all duration-300 shadow-md shadow-neutral-900/10 active:scale-98"
             >
               <Download size={13} />
               <span>Retrieve Resume</span>
-            </button>
+            </a>
             <button
               onClick={handleScrollToContact}
               className="flex items-center space-x-1.5 px-6 py-3.5 rounded-full text-xs font-bold text-neutral-600 dark:text-slate-300 bg-white/80 hover:bg-white dark:bg-white/[0.03] dark:hover:bg-white/[0.08] border border-neutral-200 dark:border-white/5 transition-all duration-300 active:scale-98"
