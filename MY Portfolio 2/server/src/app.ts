@@ -17,6 +17,7 @@ import messageRoutes from './features/messages/messages.routes.js';
 import statsRoutes from './features/stats/stats.routes.js';
 import chatRoutes from './features/chat/chat.routes.js';
 import settingsRoutes from './features/settings/settings.routes.js';
+import uploadRoutes from './features/upload/upload.routes.js';
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/api/admin/messages', messageRoutes); // We can refine route paths late
 app.use('/api/stats', statsRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Global Error Handler
 app.use(errorHandler);

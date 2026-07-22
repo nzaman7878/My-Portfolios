@@ -452,6 +452,46 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
+  const [isUploading, setIsUploading] = useState<{ [key: string]: boolean }>({});
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string, category: 'profile' | 'hero' | 'about') => {
+    const file = e.target.files?.[0];
+    if (!file || !settingsForm) return;
+
+    const uploadKey = `${category}-${fieldName}`;
+    setIsUploading(prev => ({ ...prev, [uploadKey]: true }));
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          // Note: Do not set Content-Type header when using FormData. The browser sets it with boundary.
+        },
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setSettingsForm({
+          ...settingsForm,
+          [category]: {
+            ...settingsForm[category],
+            [fieldName]: data.url
+          }
+        });
+        triggerNotification('Image uploaded to Cloudinary successfully.', '');
+      } else {
+        triggerNotification('', data.message || 'File upload failed.');
+      }
+    } catch (err) {
+      console.error(err);
+      triggerNotification('', 'Network error during upload.');
+    } finally {
+      setIsUploading(prev => ({ ...prev, [uploadKey]: false }));
+    }
+  };
+
   // ==========================================
   // UNRESTRICTED: LOGIN card if token is null
   // ==========================================
@@ -1314,9 +1354,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         <input type="text" value={settingsForm.profile.location} onChange={e => setSettingsForm({ ...settingsForm, profile: { ...settingsForm.profile, location: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
                       </div>
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Avatar Image URL</label>
-                      <input type="url" value={settingsForm.profile.image} onChange={e => setSettingsForm({ ...settingsForm, profile: { ...settingsForm.profile, image: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase flex justify-between">
+                          <span>Avatar Image Upload</span>
+                          {isUploading['profile-image'] && <span className="text-indigo-500">Uploading...</span>}
+                        </label>
+                        <input type="file" accept="image/*" onChange={e => handleFileUpload(e, 'image', 'profile')} className="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Avatar Image URL (Fallback)</label>
+                        <input type="url" value={settingsForm.profile.image} onChange={e => setSettingsForm({ ...settingsForm, profile: { ...settingsForm.profile, image: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
                     </div>
                   </div>
 
@@ -1327,9 +1376,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <label className="text-[10px] text-neutral-500 font-bold uppercase">Section Title</label>
                       <input type="text" value={settingsForm.about.title} onChange={e => setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, title: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
                     </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] text-neutral-500 font-bold uppercase">Side Image URL</label>
-                      <input type="url" value={settingsForm.about.image} onChange={e => setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, image: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase flex justify-between">
+                          <span>Side Image Upload</span>
+                          {isUploading['about-image'] && <span className="text-indigo-500">Uploading...</span>}
+                        </label>
+                        <input type="file" accept="image/*" onChange={e => handleFileUpload(e, 'image', 'about')} className="w-full text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] text-neutral-500 font-bold uppercase">Side Image URL (Fallback)</label>
+                        <input type="url" value={settingsForm.about.image} onChange={e => setSettingsForm({ ...settingsForm, about: { ...settingsForm.about, image: e.target.value }})} className="w-full text-xs px-3 py-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 text-neutral-800 dark:text-neutral-100 rounded-xl" />
+                      </div>
                     </div>
                     <div className="space-y-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
                       <label className="text-[10px] text-neutral-500 font-bold uppercase">Paragraphs</label>
